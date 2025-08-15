@@ -12,7 +12,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex gap-4 w-screen min-h-screen bg-blue-500">
+    <div className="flex gap-4 w-screen min-h-screen">
       <div className="absolute w-screen h-screen z-0">
         <Beams
           beamWidth={2}
@@ -37,7 +37,7 @@ const SignUp = () => {
       <div className="right flex-1/2 flex items-center z-10 ">
         <form
           onSubmit={handleSubmit}
-          className=" p-8 border-neutral-600/30 m-4 flex flex-col gap-2 rounded-lg sm:w-sm md:w-lg backdrop-brightness-50 backdrop-blur-lg border-2 "
+          className=" p-8 border-neutral-600/30 m-4 flex flex-col gap-2 rounded-lg sm:w-sm md:w-lg backdrop-brightness-50 backdrop-blur-lg border-2"
         >
           <label
             htmlFor="email"
@@ -69,8 +69,8 @@ const SignUp = () => {
             placeholder="Enter Password"
             className=" p-2 rounded-md mb-4 text-white/90 ring-1 ring-white/30"
           />
-          <div className="flex justify-evenly">
-            <button className="bg-green-300/20 rounded-xl">
+          <div className="flex justify-center gap-8">
+            <button className="bg-green-300/10 rounded-xl">
               <ShinyText
                 text="Sign In"
                 speed={3}
@@ -78,7 +78,7 @@ const SignUp = () => {
                 className="border p-2 px-4 rounded-xl "
               />
             </button>
-            <button className="bg-orange-300/20 rounded-xl backdrop-invert">
+            <button className="bg-orange-300/10 rounded-xl backdrop-invert">
               <ShinyText
                 text="Sign Up"
                 speed={3}

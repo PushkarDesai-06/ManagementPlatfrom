@@ -7,8 +7,7 @@ const Home = () => {
     h-16 w-full flex bg-neutral-100 justify-center"
     >
       <div>
-        <Link>Home</Link>
-        <Link></Link>
+        <Link to={"/signup"}>Home</Link>
       </div>
     </nav>
   );
