@@ -3,7 +3,7 @@ import ShinyText from "../blocks/TextAnimations/ShinyText/ShinyText";
 import Beams from "../blocks/Backgrounds/Beams/Beams";
 import axios from "axios";
 import { AuthContext } from "../context/authcontext";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -107,24 +107,16 @@ const SignIn = () => {
               Wrong username or password!
             </h1>
           )}
-          <div className="flex justify-center gap-8">
-            <button className="bg-green-300/10 rounded-xl">
-              <ShinyText
-                text={`${loading ? "loading..." : "Sign In"}`}
-                speed={3}
-                disabled={loading}
-                className="border p-2 px-4 rounded-xl text-neutral-200"
-              />
-            </button>
-            <button className="bg-orange-300/10 rounded-xl backdrop-invert">
-              <ShinyText
-                text={`${loading ? "loading..." : "Sign Up"}`}
-                speed={3}
-                disabled={false}
-                className="border p-2 px-4 rounded-xl text-neutral-200"
-              />
-            </button>
-          </div>
+          <button className="bg-green-300/10 rounded-xl w-full mb-2">
+            <h1 className="border p-2 px-4 rounded-xl text-neutral-200">{`${
+              loading ? "loading..." : "Sign In"
+            }`}</h1>
+          </button>
+          <Link to={"/signup"}>
+            <p className="text-neutral-300 hover:text-blue-300 transition text-center">
+              New Here? Sign-Up Now!
+            </p>
+          </Link>
         </form>
       </div>
     </div>
