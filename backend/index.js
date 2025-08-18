@@ -1,30 +1,63 @@
 import express from "express";
 import mongoose from "mongoose";
 import { User } from "./models/user.model.js";
+import cors from "cors";
 
 const app = express();
-console.log("first");
 
 mongoose
-  .connect("mongodb://localhost:27017/OrganisationTool")
+  .connect("mongodb://127.0.0.1:27017/OrganisationTool")
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Connection error:", err));
 
-console.log("second");
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get("/api/auth", async (req, res) => {
+app.post("/login", async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.json({
+      status: 200,
+      authenticated: false,
+      message: "User does not exist",
+    });
+  }
+  const isMatch = await user.comparePassword(password);
+
+  if (isMatch) {
+    res.json({
+      status: 200,
+      authenticated: true,
+      message: "User authenticated successfuly",
+    });
+  } else {
+    res.json({
+      status: 200,
+      authenticated: false,
+      message: "Wrong username or password",
+    });
+  }
+});
+
+app.post("/register", (req, res) => {
+  const data = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+  };
+
   try {
-    const data = await User.findOne();
-    console.log(data);
-    res.json(data);
+    User.create(data);
+    res.json({ status: 200, message: "User Created" });
   } catch (error) {
-    console.log(error);
-    res.json({ data: "data" });
+    res.json({ status: 400, message : error });
   }
 });
 

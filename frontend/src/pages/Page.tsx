@@ -1,7 +1,7 @@
 const Page = () => {
-  return (
-    <div>Page</div>
-  )
+	return (
+		<div>DASHBOARD</div>
+	)
 }
 
 export default Page

@@ -1,14 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import ShinyText from "../blocks/TextAnimations/ShinyText/ShinyText";
 import ShinyText from "../blocks/TextAnimations/ShinyText/ShinyText";
 import Beams from "../blocks/Backgrounds/Beams/Beams";
-import SplitText from "../blocks/TextAnimations/SplitText/SplitText";
+import axios from "axios";
+import { AuthContext } from "../context/authcontext";
+import { useNavigate } from "react-router";
 const SignUp = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  axios.defaults.baseURL = "http://localhost:8000/";
+  const auth = React.useContext(AuthContext);
+  const nav = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (auth?.authenticated) nav("/");
+  }, []);
+
+  interface formDataInterface {
+    name: string;
+    email: string;
+    password: string;
+  }
+
+  const [formData, setFormData] = useState<formDataInterface>({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const res = await axios.post("/register", formData);
+
+    if (res.data.status == 200) {
+      nav("/signin");
+    } else {
+      auth?.updateAuthenticated(false);
+      console.log("Error");
+    }
   };
 
   return (
@@ -28,7 +57,7 @@ const SignUp = () => {
 
       <div
         className="flex items-center justify-end flex-1/2 z-10
-      "
+			"
       >
         <h1 className="font-black text-4xl text-center text-transparent  p-4 px-8 rounded-xl backdrop-blur-2xl border-2 border-neutral-600 bg-gradient-to-r  from-neutral-500/20 via-neutral-300 to-neutral-500/20 bg-clip-text w-64">
           Manage Your Life
@@ -43,14 +72,33 @@ const SignUp = () => {
             htmlFor="email"
             className="font-bold text-xl text-white/80 drop-shadow-lg drop-shadow-black/20"
           >
+            Name
+          </label>
+          <input
+            type="text"
+            name=""
+            id="name"
+            value={formData.name}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, name: e.target.value }))
+            }
+            placeholder="Enter your name"
+            className=" p-2 rounded-md mb-4 text-white/90 ring-1 ring-white/30"
+          />
+          <label
+            htmlFor="email"
+            className="font-bold text-xl text-white/80 drop-shadow-lg drop-shadow-black/20"
+          >
             Email
           </label>
           <input
             type="email"
             name=""
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, email: e.target.value }))
+            }
             placeholder="Enter your email"
             className=" p-2 rounded-md mb-4 text-white/90 ring-1 ring-white/30"
           />
@@ -63,8 +111,10 @@ const SignUp = () => {
           <input
             type="password"
             name=""
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, password: e.target.value }))
+            }
             id="password"
             placeholder="Enter Password"
             className=" p-2 rounded-md mb-4 text-white/90 ring-1 ring-white/30"
