@@ -5,15 +5,17 @@ import { AuthContext } from "../context/authcontext";
 const Home = () => {
   const auth = React.useContext(AuthContext);
   const nav = useNavigate();
+  const username = auth?.name || "User";
 
   useEffect(() => {
     if (!auth?.authenticated) nav("/signin");
   }, []);
 
   const handleLogout = () => {
-    auth?.updateAuthenticated(false)
-    nav('/signin')
-  }
+    auth?.updateAuthenticated(false);
+    auth?.updateUser("", "");
+    nav("/signin");
+  };
 
   return (
     <nav
@@ -23,8 +25,11 @@ const Home = () => {
       <div>
         <Link to={"/signup"}>Home</Link>
       </div>
+      <div>{username}</div>
       <div>
-        <button className="border px-4 p-2 self-end" onClick={handleLogout}>Logout</button>
+        <button className="border px-4 p-2 self-end" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </nav>
   );

@@ -14,10 +14,10 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  const name = req.query.name
-  if(name){
-    res.send(`Hello ${name}`)
-  }else{
+  const name = req.query.name;
+  if (name) {
+    res.send(`Hello ${name}`);
+  } else {
     res.send("Hello World");
   }
 });
@@ -41,6 +41,8 @@ app.post("/login", async (req, res) => {
       status: 200,
       authenticated: true,
       message: "User authenticated successfuly",
+      name: user.name,
+      email: user.email,
     });
   } else {
     res.json({
@@ -62,7 +64,7 @@ app.post("/register", (req, res) => {
     User.create(data);
     res.json({ status: 200, message: "User Created" });
   } catch (error) {
-    res.json({ status: 400, message : error });
+    res.json({ status: 400, message: error });
   }
 });
 

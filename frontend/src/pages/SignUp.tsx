@@ -130,12 +130,12 @@ const SignUp = () => {
               loading ? "loading..." : "Sign Up"
             }`}</h1>
           </button>
-          <p className="text-neutral-300  text-center">
-            Already have an account?
+          <div className="text-neutral-300  text-center">
+            <span>Already have an account?</span>
             <Link to={"/signin"}>
               <p className="hover:text-blue-300 transition">Sign in</p>{" "}
             </Link>
-          </p>
+          </div>
         </form>
       </div>
     </div>

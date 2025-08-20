@@ -56,6 +56,7 @@ const SignIn = () => {
     setLoading(false);
     if (res.data.status === 200 && res.data.authenticated === true) {
       auth?.updateAuthenticated(true);
+      auth?.updateUser(res.data.name, res.data.email);
       setError(false);
       nav("/");
     } else if (res.data.status === 200) {
@@ -142,12 +143,12 @@ const SignIn = () => {
               loading ? "loading..." : "Sign In"
             }`}</h1>
           </button>
-          <p className="text-neutral-300  text-center">
-            New Here?
+          <div className="text-neutral-300  text-center">
+            <span>New Here?</span>
             <Link to={"/signup"}>
               <p className="hover:text-blue-300 transition">Sign up</p>
             </Link>
-          </p>
+          </div>
         </form>
       </div>
 
