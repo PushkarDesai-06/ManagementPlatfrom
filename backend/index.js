@@ -14,7 +14,12 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  const name = req.query.name
+  if(name){
+    res.send(`Hello ${name}`)
+  }else{
+    res.send("Hello World");
+  }
 });
 
 app.post("/login", async (req, res) => {

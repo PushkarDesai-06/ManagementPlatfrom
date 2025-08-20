@@ -59,8 +59,8 @@ const SignUp = () => {
         className="flex items-center justify-end flex-1/2 z-10
 			"
       >
-        <h1 className="font-black text-4xl text-center text-transparent  p-4 px-8 rounded-xl backdrop-blur-2xl border-2 border-neutral-600 bg-gradient-to-r  from-neutral-500/20 via-neutral-300 to-neutral-500/20 bg-clip-text w-64">
-          Manage Your Life
+        <h1 className="font-ubuntu text-4xl text-center text-transparent  p-4 px-8 rounded-xl backdrop-blur-2xl border-2 border-neutral-600 bg-gradient-to-r  from-neutral-500/20 via-neutral-300 to-neutral-500/20 bg-clip-text w-64">
+          <p className="font-poppins">Manage</p>Your Life
         </h1>
       </div>
       <div className="right flex-1/2 flex items-center z-10 ">
@@ -77,6 +77,8 @@ const SignUp = () => {
           <input
             type="text"
             name=""
+            minLength={4}
+            required={true}
             id="name"
             value={formData.name}
             onChange={(e) =>
@@ -94,6 +96,7 @@ const SignUp = () => {
           <input
             type="email"
             name=""
+            required={true}
             id="email"
             value={formData.email}
             onChange={(e) =>
@@ -111,6 +114,8 @@ const SignUp = () => {
           <input
             type="password"
             name=""
+            required={true}
+            minLength={6}
             value={formData.password}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, password: e.target.value }))
@@ -125,11 +130,12 @@ const SignUp = () => {
               loading ? "loading..." : "Sign Up"
             }`}</h1>
           </button>
-          <Link to={"/signin"}>
-            <p className="text-neutral-300 hover:text-blue-300 transition text-center">
-              Already have an account? Sign-In now!
-            </p>
-          </Link>
+          <p className="text-neutral-300  text-center">
+            Already have an account?
+            <Link to={"/signin"}>
+              <p className="hover:text-blue-300 transition">Sign in</p>{" "}
+            </Link>
+          </p>
         </form>
       </div>
     </div>
