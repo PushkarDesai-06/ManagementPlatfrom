@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
-// import ShinyText from "../blocks/TextAnimations/ShinyText/ShinyText";
-import ShinyText from "../blocks/TextAnimations/ShinyText/ShinyText";
-import Beams from "../blocks/Backgrounds/Beams/Beams";
-import axios from "axios";
 import { AuthContext } from "../context/authcontext";
 import { Link, useNavigate } from "react-router";
+import Beams from "../blocks/Backgrounds/Beams/Beams";
+import axios from "../lib/axios";
+
 const SignUp = () => {
-  axios.defaults.baseURL = "http://localhost:8000/";
   const auth = React.useContext(AuthContext);
-  const nav = useNavigate();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (auth?.authenticated) nav("/");
+    if (auth?.authenticated) navigate("/");
   }, []);
 
   interface formDataInterface {
@@ -29,14 +27,19 @@ const SignUp = () => {
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const res = await axios.post("/register", formData);
+    try {
+      e.preventDefault();
+      const res = await axios.post("/register", formData);
 
-    if (res.data.status == 200) {
-      nav("/signin");
-    } else {
+      if (res.data.status == 200) {
+        navigate("/signin");
+      } else {
+        auth?.updateAuthenticated(false);
+        console.log("Error");
+      }
+    } catch (error) {
       auth?.updateAuthenticated(false);
-      console.log("Error");
+      console.log("Could not connect to server...");
     }
   };
 

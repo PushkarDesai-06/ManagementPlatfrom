@@ -2,8 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import { User } from "./models/user.model.js";
 import cors from "cors";
+import jwt from "jsonwebtoken";
 
 const app = express();
+
+const SECRET = process.env.JWT_SECRET;
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/OrganisationTool")
@@ -37,12 +40,16 @@ app.post("/login", async (req, res) => {
   const isMatch = await user.comparePassword(password);
 
   if (isMatch) {
+    const payload = { user, email };
+    const token = jwt.sign(payload, SECRET, { expiresIn: "1hr" });
+
     res.json({
       status: 200,
       authenticated: true,
       message: "User authenticated successfuly",
       name: user.name,
       email: user.email,
+      token: token,
     });
   } else {
     res.json({

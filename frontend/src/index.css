@@ -6,6 +6,7 @@
 @theme {
   --color-primary: #dcd8d3;
   --animate-shrink10s: shrink 10s linear;
+  --animate-shrink5s: shrink 5s linear;
   --animate-shine : shine 5s linear infinite
   --font-poppins: "Poppins", "sans-serif";
   --font-ubuntu: "Ubuntu", "sans-serif";
