@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useContext } from "react";
 import { createPortal } from "react-dom";
-import { alertContext } from "../context/alertContext";
+import { AlertContext } from "../context/alertContext";
 
 const Alert = () => {
-  const { alert, closeAlert, showAlert } = useContext(alertContext);
+  const { alert, closeAlert, showAlert } = useContext(AlertContext);
 
   return (
     <>

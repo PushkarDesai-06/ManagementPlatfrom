@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { alertContext } from "./alertContext";
+import { AlertContext } from "./alertContext";
 
 const AlertContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [alert, setAlert] = useState<{ title: string; message: string }>({
@@ -29,11 +29,11 @@ const AlertContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <alertContext.Provider
+    <AlertContext.Provider
       value={{ alert, openAlert, closeAlert, timeRef, showAlert }}
     >
       {children}
-    </alertContext.Provider>
+    </AlertContext.Provider>
   );
 };
 

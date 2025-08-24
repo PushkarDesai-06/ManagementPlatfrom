@@ -1,27 +1,54 @@
 import React, { useEffect, useRef, useState } from "react";
+import { type formDataInterface } from "../types/types";
+import { Link, useNavigate } from "react-router";
+import { AlertContext } from "../context/alertContext";
+import { AuthContext } from "../context/authcontext";
 import Beams from "../blocks/Backgrounds/Beams/Beams";
 import axios from "../lib/axios";
-import { AuthContext } from "../context/authcontext";
-import { Link, useNavigate } from "react-router";
-import Alert from "../components/Alert";
-import { alertContext } from "../context/alertContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
   const auth = React.useContext(AuthContext);
-  const { openAlert } = React.useContext(alertContext);
+  const { openAlert } = React.useContext(AlertContext);
   const navigate = useNavigate();
+  const { setLocalStorage, getLocalStorage, removeLocalStorage } =
+    useLocalStorage();
 
   useEffect(() => {
-    if (auth?.authenticated) navigate("/");
-  }, []);
+    const verifyToken = async (JwtToken: string) => {
+      try {
+        const req = await axios.get(`/get-info`, {
+          headers: {
+            Authorization: `Bearer ${JwtToken}`,
+          },
+        });
+        if (req.data.status === 200 && req.data.authenticated) {
+          auth?.updateAuthenticated(true);
+          auth?.updateUser(req.data.name, req.data.email);
+          navigate("/");
+          return;
+        } else if (req.data.status === 401) {
+          auth?.updateAuthenticated(false);
+          auth?.updateUser(null, null);
+          openAlert("Login Error!", "You have to re-login to continue");
+        } else {
+          auth?.updateAuthenticated(false);
+          auth?.updateUser(null, null);
+          openAlert("Session Expired!", "You have to re-login to continue");
+        }
+      } catch (error) {
+        console.log(error);
+        removeLocalStorage("JwtToken");
+      }
+    };
 
-  interface formDataInterface {
-    email: string;
-    password: string;
-  }
+    if (auth?.authenticated) navigate("/");
+    else if (getLocalStorage("JwtToken")) {
+      verifyToken(getLocalStorage("JwtToken"));
+    }
+  }, []);
 
   const [formData, setFormData] = useState<formDataInterface>({
     email: "",
@@ -37,6 +64,7 @@ const SignIn = () => {
       auth?.updateAuthenticated(true);
       auth?.updateUser(res.data.name, res.data.email);
       setError(false);
+      setLocalStorage("JwtToken", res.data.token);
       navigate("/");
     } else if (res.data.status === 200) {
       auth?.updateAuthenticated(false);
@@ -52,7 +80,6 @@ const SignIn = () => {
 
   return (
     <>
-      <Alert />
       <div className="flex gap-4 w-screen min-h-screen">
         <div className="absolute w-screen h-screen z-0">
           <Beams
@@ -68,7 +95,7 @@ const SignIn = () => {
         </div>
 
         <div className="flex items-center justify-end flex-1/2 z-10">
-          <h1 className="font-ubuntu text-4xl text-center text-transparent  p-4 px-8 rounded-xl backdrop-blur-2xl border-2 border-neutral-600 bg-gradient-to-r  from-neutral-500/20 via-neutral-300 to-neutral-500/20 bg-clip-text w-64">
+          <h1 className="font-ubuntu text-4xl text-center text-transparent p-4 px-8 rounded-xl backdrop-blur-2xl border-2 border-neutral-600 bg-gradient-to-r from-neutral-500/20 via-neutral-300 to-neutral-500/20 bg-clip-text w-64">
             <p className="font-poppins">Manage</p>Your Life
           </h1>
         </div>

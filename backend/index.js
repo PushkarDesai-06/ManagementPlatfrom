@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 import { User } from "./models/user.model.js";
 import cors from "cors";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 const app = express();
 
-const SECRET = process.env.JWT_SECRET;
+const JWT_SECRET =
+  process.env.JWT_SECRET || "sdlifhjoi4o35234534o3herlkjhfg9836huirgphuy508";
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/OrganisationTool")
@@ -36,13 +38,13 @@ app.post("/login", async (req, res) => {
       authenticated: false,
       message: "User does not exist",
     });
+    return;
   }
-  const isMatch = await user.comparePassword(password);
+  const isMatch = password ? await user.comparePassword(password) : false;
 
   if (isMatch) {
-    const payload = { user, email };
-    const token = jwt.sign(payload, SECRET, { expiresIn: "1hr" });
-
+    const payload = { name: user.name, email: user.email };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1hr" });
     res.json({
       status: 200,
       authenticated: true,
@@ -72,6 +74,28 @@ app.post("/register", (req, res) => {
     res.json({ status: 200, message: "User Created" });
   } catch (error) {
     res.json({ status: 400, message: error });
+  }
+});
+
+app.get("/get-info", (req, res) => {
+  const jwtToken = req.headers["authorization"].split(" ")[1];
+
+  try {
+    const payload = jwt.verify(jwtToken, JWT_SECRET);
+
+    res.json({
+      status: 200,
+      authenticated: true,
+      name: payload.name,
+      email: payload.email,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      status: 401,
+      authenticated: false,
+      message: "Authentication Error!",
+    });
   }
 });
 

@@ -5,13 +5,16 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import AuthContextProvider from "./context/AuthContextProvider";
 import AlertContextProvider from "./context/AlertContextProvider";
+import Alert from "./components/Alert";
+import Protected from "./components/Protected";
 
 function App() {
   return (
     <AuthContextProvider>
       <AlertContextProvider>
+        <Alert />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Protected><Home /></Protected> } />
           <Route path="/page" element={<Page />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />

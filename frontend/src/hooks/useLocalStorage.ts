@@ -1,8 +1,16 @@
-export const useLocalStorage = (key: string) => {
-  try {
-    const data = JSON.parse(localStorage.getItem(key));
-    return data;
-  } catch (error) {
-    return localStorage.getItem(key);
-  }
+const useLocalStorage = () => {
+  const setLocalStorage = (key: string, value: Record<any, any>) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
+
+  const getLocalStorage = (key: string) => {
+    return JSON.parse(localStorage.getItem(key)!);
+  };
+  const removeLocalStorage = (key: string) => {
+    localStorage.removeItem(key);
+  };
+
+  return { setLocalStorage, getLocalStorage, removeLocalStorage };
 };
+
+export default useLocalStorage;

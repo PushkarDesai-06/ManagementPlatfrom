@@ -11,7 +11,7 @@ export type AlertContextInterface = {
   showAlert: boolean;
 };
 
-export const alertContext = React.createContext<AlertContextInterface>({
+export const AlertContext = React.createContext<AlertContextInterface>({
   alert: {
     title: "",
     message: "",
