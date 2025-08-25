@@ -1,19 +1,15 @@
 import express from "express";
-import mongoose from "mongoose";
 import { User } from "./models/user.model.js";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import connectDb from "./db.js";
 
 const app = express();
 
-const JWT_SECRET =
-  process.env.JWT_SECRET || "sdlifhjoi4o35234534o3herlkjhfg9836huirgphuy508";
+const JWT_SECRET = process.env.JWT_SECRET;
 
-mongoose
-  .connect("mongodb://127.0.0.1:27017/OrganisationTool")
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Connection error:", err));
+const mongoose = connectDb(process.env.DB_URL);
 
 app.use(express.json());
 app.use(cors());
@@ -33,7 +29,7 @@ app.post("/login", async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    res.json({
+    res.status(200).json({
       status: 200,
       authenticated: false,
       message: "User does not exist",
@@ -45,7 +41,7 @@ app.post("/login", async (req, res) => {
   if (isMatch) {
     const payload = { name: user.name, email: user.email };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1hr" });
-    res.json({
+    res.status(200).json({
       status: 200,
       authenticated: true,
       message: "User authenticated successfuly",
@@ -54,7 +50,7 @@ app.post("/login", async (req, res) => {
       token: token,
     });
   } else {
-    res.json({
+    res.status(200).json({
       status: 200,
       authenticated: false,
       message: "Wrong username or password",
@@ -71,9 +67,9 @@ app.post("/register", (req, res) => {
 
   try {
     User.create(data);
-    res.json({ status: 200, message: "User Created" });
+    res.status(200).json({ status: 200, message: "User Created" });
   } catch (error) {
-    res.json({ status: 400, message: error });
+    res.status(400).json({ status: 400, message: error });
   }
 });
 
@@ -82,16 +78,26 @@ app.get("/get-info", (req, res) => {
 
   try {
     const payload = jwt.verify(jwtToken, JWT_SECRET);
+    console.log(payload);
 
-    res.json({
+    if (payload.exp > Date.now()) {
+      res.status(401).json({
+        status: 401,
+        authenticated: false,
+        message: "JTW Token expired",
+      });
+    }
+
+    res.status(200).json({
       status: 200,
       authenticated: true,
       name: payload.name,
       email: payload.email,
     });
+    console.log("Authorized");
   } catch (error) {
     console.log(error);
-    res.json({
+    res.status(401).json({
       status: 401,
       authenticated: false,
       message: "Authentication Error!",
