@@ -6,6 +6,7 @@ import { AuthContext } from "../context/authcontext";
 import Beams from "../blocks/Backgrounds/Beams/Beams";
 import axios from "../lib/axios";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { isAxiosError } from "axios";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -24,23 +25,28 @@ const SignIn = () => {
             Authorization: `Bearer ${JwtToken}`,
           },
         });
-        if (req.data.status === 200 && req.data.authenticated) {
+        if (req.data.authenticated) {
           auth?.updateAuthenticated(true);
           auth?.updateUser(req.data.name, req.data.email);
           navigate("/");
           return;
-        } else if (req.data.status === 401) {
-          auth?.updateAuthenticated(false);
-          auth?.updateUser(null, null);
-          openAlert("Login Error!", "You have to re-login to continue");
-        } else {
-          auth?.updateAuthenticated(false);
-          auth?.updateUser(null, null);
-          openAlert("Session Expired!", "You have to re-login to continue");
         }
-      } catch (error) {
-        console.log(error);
-        removeLocalStorage("JwtToken");
+      } catch (error: unknown) {
+        if (isAxiosError(error)) {
+          if (error.response && error.response.status === 401) {
+            auth?.updateAuthenticated(false);
+            auth?.updateUser("", "");
+            openAlert("Login Error!", "You have to re-login to continue");
+          } else {
+            auth?.updateAuthenticated(false);
+            auth?.updateUser(null, null);
+            openAlert("Session Expired!", "You have to re-login to continue");
+          }
+
+          console.log(error);
+          removeLocalStorage("JwtToken");
+          console.log("removed Token");
+        }
       }
     };
 

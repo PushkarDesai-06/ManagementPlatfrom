@@ -4,6 +4,7 @@ import { AuthContext } from "../context/authcontext";
 import { useNavigate } from "react-router";
 import { AlertContext } from "../context/alertContext";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { AxiosError, isAxiosError } from "axios";
 
 const Protected = ({ children }: { children: React.ReactNode }) => {
   const auth = useContext(AuthContext);
@@ -21,24 +22,29 @@ const Protected = ({ children }: { children: React.ReactNode }) => {
             Authorization: `Bearer ${JwtToken}`,
           },
         });
-        if (req.data.status === 200 && req.data.authenticated) {
+        if (req.data.name) {
           auth?.updateAuthenticated(true);
           auth?.updateUser(req.data.name, req.data.email);
           // navigate("/");
           setLoading(false);
           return;
-        } else if (req.data.status === 401) {
-          auth?.updateAuthenticated(false);
-          auth?.updateUser(null, null);
-          setLoading(false);
-        } else {
-          auth?.updateAuthenticated(false);
-          auth?.updateUser(null, null);
-          navigate("/signin");
         }
-      } catch (error) {
-        console.log(error);
-        removeLocalStorage("JwtToken");
+      } catch (error: unknown) {
+        if (isAxiosError(error)) {
+          if (error.response && error.response.status === 401) {
+            auth?.updateAuthenticated(false);
+            auth?.updateUser(null, null);
+            setLoading(false);
+          } else {
+            auth?.updateAuthenticated(false);
+            auth?.updateUser("", "");
+            // console.log(er);
+            navigate("/signin");
+          }
+
+          console.log(error);
+          removeLocalStorage("JwtToken");
+        }
       }
     };
     if (auth?.authenticated) setLoading(false);
