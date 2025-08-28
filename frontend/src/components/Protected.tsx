@@ -4,15 +4,14 @@ import { AuthContext } from "../context/authcontext";
 import { useNavigate } from "react-router";
 import { AlertContext } from "../context/alertContext";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { AxiosError, isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 
 const Protected = ({ children }: { children: React.ReactNode }) => {
   const auth = useContext(AuthContext);
   const { openAlert } = useContext(AlertContext);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const { getLocalStorage, setLocalStorage, removeLocalStorage } =
-    useLocalStorage();
+  const { getLocalStorage, removeLocalStorage } = useLocalStorage();
 
   useEffect(() => {
     const verifyToken = async (JwtToken: string) => {

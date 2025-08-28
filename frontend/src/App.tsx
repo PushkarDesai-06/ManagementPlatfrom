@@ -7,6 +7,7 @@ import AuthContextProvider from "./context/AuthContextProvider";
 import AlertContextProvider from "./context/AlertContextProvider";
 import Alert from "./components/Alert";
 import Protected from "./components/Protected";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   return (
@@ -14,10 +15,18 @@ function App() {
       <AlertContextProvider>
         <Alert />
         <Routes>
-          <Route path="/" element={<Protected><Home /></Protected> } />
+          <Route
+            path="/"
+            element={
+              <Protected>
+                <Home />
+              </Protected>
+            }
+          />
           <Route path="/page" element={<Page />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/temp" element={<Sidebar />} />
         </Routes>
       </AlertContextProvider>
     </AuthContextProvider>

@@ -18,20 +18,26 @@ const Home = () => {
   };
 
   return (
-    <nav
-      className="
-    h-16 w-full flex bg-neutral-100 justify-center"
-    >
-      <div>
-        <Link to={"/signup"}>Home</Link>
-      </div>
-      <div>{auth?.name}</div>
-      <div>
-        <button className="border px-4 p-2 self-end" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
-    </nav>
+    <>
+      <nav
+        className="
+      h-16 w-full flex bg-neutral-100 justify-between items-center px-4"
+      >
+        <div>
+          <Link to={"/signup"}>Home</Link>
+        </div>
+        <div>
+          <button className="border px-4 p-2 self-end" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+        <div className="flex gap-2 items-center">
+          <div>{auth?.name}</div>
+          <div className="border rounded-full w-10 h-10"></div>
+        </div>
+      </nav>
+      <div className="flex"></div>
+    </>
   );
 };
 
