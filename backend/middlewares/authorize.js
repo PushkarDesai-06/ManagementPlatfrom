@@ -11,23 +11,31 @@ export const authorizeJWT = async (req, res, next) => {
 
   try {
     const jwtToken = req.headers.authorization.split(" ")[1];
+    try {
+      const payload = jwt.verify(jwtToken, JWT_SECRET);
+      const data = await User.findOne({ email: payload.email });
+      if (!data) res.status(404).json({ message: "User Not found" });
+      req.headers.user = { name: data.name, email: data.email };
+      next();
+    } catch (error) {
+      console.log(error);
+      if (error.name === "TokenExpiredError") {
+        res.status(401).json({
+          // status: 401,
+          authenticated: false,
+          message: "JTW Token expired",
+        });
+        return;
+      }
 
-    const payload = jwt.verify(jwtToken, JWT_SECRET);
-    // console.log(payload);
-    // if (Date.now() >= payload.exp) {
-    //   res.status(401).json({
-    //     // status: 401,
-    //     authenticated: false,
-    //     message: "JTW Token expired",
-    //   });
-    // }
+      res.status(401).json({
+        // status: 401,
+        authenticated: false,
+        message: "Server Error, Please try again later.",
+      });
+    }
 
-    const data = await User.findOne({ email: payload.email });
     // console.log(data);
-
-    if (!data) res.status(404).json({ message: "User Not found" });
-    req.headers.user = { name: data.name, email: data.email };
-    next();
   } catch (error) {
     res.status(400).json({ message: error });
     console.log(error);

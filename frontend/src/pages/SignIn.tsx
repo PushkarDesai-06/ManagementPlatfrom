@@ -39,7 +39,7 @@ const SignIn = () => {
             openAlert("Login Error!", "You have to re-login to continue");
           } else {
             auth?.updateAuthenticated(false);
-            auth?.updateUser(null, null);
+            auth?.updateUser("", "");
             openAlert("Session Expired!", "You have to re-login to continue");
           }
 

@@ -32,17 +32,20 @@ const Protected = ({ children }: { children: React.ReactNode }) => {
         if (isAxiosError(error)) {
           if (error.response && error.response.status === 401) {
             auth?.updateAuthenticated(false);
-            auth?.updateUser(null, null);
+            auth?.updateUser("", "");
             setLoading(false);
           } else {
             auth?.updateAuthenticated(false);
             auth?.updateUser("", "");
             // console.log(er);
-            navigate("/signin");
           }
-
-          console.log(error);
+          openAlert(
+            "Sign In Error!",
+            error.response ? error.response.data.message : ""
+          );
           removeLocalStorage("JwtToken");
+          navigate("/signin");
+          console.log(error);
         }
       }
     };
