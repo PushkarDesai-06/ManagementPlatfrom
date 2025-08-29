@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { type formDataInterface } from "../types/types";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { AlertContext } from "../context/alertContext";
 import { AuthContext } from "../context/authcontext";
 import Beams from "../blocks/Backgrounds/Beams/Beams";

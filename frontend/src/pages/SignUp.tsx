@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AuthContext } from "../context/authcontext";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import Beams from "../blocks/Backgrounds/Beams/Beams";
 import axios from "../lib/axios";
 

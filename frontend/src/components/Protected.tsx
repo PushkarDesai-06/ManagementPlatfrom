@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "../lib/axios";
 import { AuthContext } from "../context/authcontext";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { AlertContext } from "../context/alertContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { isAxiosError } from "axios";
