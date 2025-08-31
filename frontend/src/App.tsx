@@ -9,6 +9,7 @@ import Alert from "./components/Alert";
 import Protected from "./components/Protected";
 import Sidebar from "./components/Sidebar";
 import { BrowserRouter } from "react-router-dom";
+import Account from "./pages/Account";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
             <Route path="/page" element={<Page />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route
+              path="/account"
+              element={
+                <Protected>
+                  <Account />
+                </Protected>
+              }
+            />
             <Route path="/temp" element={<Sidebar />} />
           </Routes>
         </BrowserRouter>

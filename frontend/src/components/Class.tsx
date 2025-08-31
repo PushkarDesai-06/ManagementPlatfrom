@@ -50,20 +50,16 @@ const Class = ({
           <CgAddR />
         </button>
         <AnimatePresence>
-          {createPortal(
-            openIdx === index && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                exit={{ opacity: 0 }}
-                className="p-4 top-0 absolute right-0 backdrop-blur-2xl bg-red-500 rounded-md px-2 py-1 border border-neutral-400/30 text-sm z-50"
-              >
-                {console.log("Created", index)}
-                {description}
-              </motion.div>
-            ),
-            document.getElementById("alert-root") || document.body
+          {openIdx === index && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              exit={{ opacity: 0 }}
+              className="p-4 top-0 absolute right-0 backdrop-blur-2xl  rounded-md px-2 py-1 border border-neutral-400/30 text-sm z-50"
+            >
+              {description}
+            </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
