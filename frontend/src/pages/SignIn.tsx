@@ -89,14 +89,14 @@ const SignIn = () => {
       <div className="flex gap-4 w-screen min-h-screen">
         <div className="absolute w-screen h-screen z-0">
           <Beams
-            beamWidth={2}
+            beamWidth={4}
             beamHeight={15}
             beamNumber={12}
-            lightColor="#ffffff"
+            lightColor="#00E9FF"
             speed={2}
             noiseIntensity={1.75}
             scale={0.2}
-            rotation={0}
+            rotation={45}
           />
         </div>
 

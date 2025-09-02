@@ -9,4 +9,10 @@ export type NavBarProps = {
 
 export type ProfileCardProps = {
   handleEditClick: (e: React.MouseEvent) => void;
+  name: string;
+  city: string;
+  countryCode: string;
+  handle: string;
+  description?: string;
+  pfpUrl?: string;
 };

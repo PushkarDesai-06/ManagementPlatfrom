@@ -10,6 +10,7 @@ import Protected from "./components/Protected";
 import Sidebar from "./components/Sidebar";
 import { BrowserRouter } from "react-router-dom";
 import Account from "./pages/Account";
+import Todo from "./components/TodoList";
 
 function App() {
   return (
@@ -37,7 +38,8 @@ function App() {
                 </Protected>
               }
             />
-            <Route path="/temp" element={<Sidebar />} />
+
+            <Route path="/temp" element={<Todo />} />
           </Routes>
         </BrowserRouter>
       </AlertContextProvider>
