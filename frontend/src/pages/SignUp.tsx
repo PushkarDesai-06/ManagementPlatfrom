@@ -3,12 +3,14 @@ import { AuthContext } from "../context/authcontext";
 import { Link, useNavigate } from "react-router-dom";
 import Beams from "../blocks/Backgrounds/Beams/Beams";
 import axios from "../lib/axios";
+import { AlertContext } from "../context/alertContext";
 
 const SignUp = () => {
   const auth = React.useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const { openAlert } = React.useContext(AlertContext);
 
   useEffect(() => {
     if (auth?.authenticated) navigate("/");
@@ -39,7 +41,7 @@ const SignUp = () => {
       }
     } catch (error) {
       auth?.updateAuthenticated(false);
-      console.log("Could not connect to server...");
+      openAlert("Server Error" , 'Could not connect to server. Please try again later');
     }
   };
 

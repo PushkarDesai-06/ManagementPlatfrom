@@ -64,23 +64,30 @@ const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const res = await axios.post("/login", formData);
-    setLoading(false);
-    if (res.data.status === 200 && res.data.authenticated === true) {
-      auth?.updateAuthenticated(true);
-      auth?.updateUser(res.data.name, res.data.email);
-      setError(false);
-      setLocalStorage("JwtToken", res.data.token);
-      navigate("/");
-    } else if (res.data.status === 200) {
-      auth?.updateAuthenticated(false);
-      openAlert(
-        "Authentication Failed",
-        "Failed to authorise user : wrong username or password"
-      );
-    } else {
-      setError(true);
+    try {
+
+      const res = await axios.post("/login", formData);
       setLoading(false);
+      if (res.data.status === 200 && res.data.authenticated === true) {
+        auth?.updateAuthenticated(true);
+        auth?.updateUser(res.data.name, res.data.email);
+        setError(false);
+        setLocalStorage("JwtToken", res.data.token);
+        navigate("/");
+      } else if (res.data.status === 200) {
+        auth?.updateAuthenticated(false);
+        openAlert(
+          "Authentication Failed",
+          "Failed to authorise user : wrong username or password"
+        );
+      } else {
+        setError(true);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false)
+      openAlert('Server Error', 'Failed to sign in, try again later')
+
     }
   };
 
@@ -154,9 +161,8 @@ const SignIn = () => {
               </h1>
             )}
             <button className="bg-green-300/10 rounded-xl w-full mb-2">
-              <h1 className="border p-2 px-4 rounded-xl text-neutral-200">{`${
-                loading ? "loading..." : "Sign In"
-              }`}</h1>
+              <h1 className="border p-2 px-4 rounded-xl text-neutral-200">{`${loading ? "loading..." : "Sign In"
+                }`}</h1>
             </button>
             <div className="text-neutral-300  text-center">
               <span>New Here?</span>
