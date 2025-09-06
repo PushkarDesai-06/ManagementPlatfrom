@@ -65,7 +65,6 @@ const SignIn = () => {
     e.preventDefault();
     setLoading(true);
     try {
-
       const res = await axios.post("/login", formData);
       setLoading(false);
       if (res.data.status === 200 && res.data.authenticated === true) {
@@ -85,9 +84,8 @@ const SignIn = () => {
         setLoading(false);
       }
     } catch (error) {
-      setLoading(false)
-      openAlert('Server Error', 'Failed to sign in, try again later')
-
+      setLoading(false);
+      openAlert("Server Error", "Failed to sign in, try again later");
     }
   };
 
@@ -161,8 +159,9 @@ const SignIn = () => {
               </h1>
             )}
             <button className="bg-green-300/10 rounded-xl w-full mb-2">
-              <h1 className="border p-2 px-4 rounded-xl text-neutral-200">{`${loading ? "loading..." : "Sign In"
-                }`}</h1>
+              <h1 className="border p-2 px-4 rounded-xl text-neutral-200">{`${
+                loading ? "loading..." : "Sign In"
+              }`}</h1>
             </button>
             <div className="text-neutral-300  text-center">
               <span>New Here?</span>
