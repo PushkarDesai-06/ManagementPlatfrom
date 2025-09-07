@@ -13,29 +13,29 @@ router.post("/login", async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    res.status(200).json({
-      status: 200,
+    return res.status(200).json({
       authenticated: false,
       message: "User does not exist",
     });
-    return;
   }
   const isMatch = password ? await user.comparePassword(password) : false;
 
   if (isMatch) {
     const payload = { name: user.name, email: user.email };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1hr" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
     res.status(200).json({
-      status: 200,
       authenticated: true,
       message: "User authenticated successfuly",
       name: user.name,
       email: user.email,
-      token: token,
     });
   } else {
     res.status(200).json({
-      status: 200,
       authenticated: false,
       message: "Wrong username or password",
     });
@@ -50,10 +50,17 @@ router.post("/register", (req, res) => {
   };
 
   try {
-    User.create(data);
-    res.status(200).json({ status: 200, message: "User Created" });
+    const user = User.createOne(data);
+    const payload = { name: user.name, email: user.email };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1hr" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({ message: "User Created" });
   } catch (error) {
-    res.status(400).json({ status: 400, message: error });
+    res.status(400).json({ message: error });
   }
 });
 
@@ -65,4 +72,9 @@ router.get("/get-info", authorizeJWT, (req, res) => {
     console.log(error);
     res.status(401).json({ message: error });
   }
+});
+
+router.get("/logout", (req, res) => {
+  res.clearCookie();
+  res.json({ message: "Cleared Cookies" });
 });

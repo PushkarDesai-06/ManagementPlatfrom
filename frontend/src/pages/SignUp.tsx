@@ -31,7 +31,7 @@ const SignUp = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      const res = await axios.post("/register", formData);
+      const res = await axios.post("/auth/register", formData);
 
       if (res.data.status == 200) {
         navigate("/signin");

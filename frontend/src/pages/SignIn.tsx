@@ -20,11 +20,7 @@ const SignIn = () => {
   useEffect(() => {
     const verifyToken = async (JwtToken: string) => {
       try {
-        const req = await axios.get(`/get-info`, {
-          headers: {
-            Authorization: `Bearer ${JwtToken}`,
-          },
-        });
+        const req = await axios.get(`/auth/get-info`);
         if (req.data.authenticated) {
           auth?.updateAuthenticated(true);
           auth?.updateUser(req.data.name, req.data.email);
@@ -65,13 +61,12 @@ const SignIn = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("/login", formData);
+      const res = await axios.post("/auth/login", formData);
       setLoading(false);
-      if (res.data.status === 200 && res.data.authenticated === true) {
+      if (res.status === 200 && res.data.authenticated === true) {
         auth?.updateAuthenticated(true);
         auth?.updateUser(res.data.name, res.data.email);
         setError(false);
-        setLocalStorage("JwtToken", res.data.token);
         navigate("/");
       } else if (res.data.status === 200) {
         auth?.updateAuthenticated(false);

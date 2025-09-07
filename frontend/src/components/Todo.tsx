@@ -37,7 +37,6 @@ const Todo = ({ text = "Lorem ipsum dolor sit, amet consectetur" }) => {
   useEffect(() => {
     const mouseClickHandler = () => {
       setShowOptins(false);
-      console.log(isEditable);
     };
 
     window.addEventListener("click", () => mouseClickHandler());
@@ -52,13 +51,18 @@ const Todo = ({ text = "Lorem ipsum dolor sit, amet consectetur" }) => {
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8 }}
-      className="border w-lg flex px-2 items-center rounded-md relative"
+      className={`border w-lg flex px-2 items-center rounded-md relative
+            ${isEditable && "bg-neutral-200"}
+        `}
     >
-      <div className="flex-1 overflow-x-auto text-nowrap min-h-8 flex items-center">
+      <div
+        className={`flex-1 overflow-x-auto text-nowrap min-h-8 flex items-center`}
+      >
         <input
           ref={todoRef}
           disabled={!isEditable}
-          className="flex items-center w-full"
+          className={`flex items-center w-ful outline-0 
+            `}
           value={todoText}
           onChange={(e) => setTodoText(e.target.value)}
         />

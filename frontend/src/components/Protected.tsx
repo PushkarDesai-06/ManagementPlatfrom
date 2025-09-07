@@ -14,13 +14,9 @@ const Protected = ({ children }: { children: React.ReactNode }) => {
   const { getLocalStorage, removeLocalStorage } = useLocalStorage();
 
   useEffect(() => {
-    const verifyToken = async (JwtToken: string) => {
+    const verifyToken = async () => {
       try {
-        const req = await axios.get(`/get-info`, {
-          headers: {
-            Authorization: `Bearer ${JwtToken}`,
-          },
-        });
+        const req = await axios.get(`/auth/get-info`);
         if (req.data.name) {
           auth?.updateAuthenticated(true);
           auth?.updateUser(req.data.name, req.data.email);
@@ -34,6 +30,7 @@ const Protected = ({ children }: { children: React.ReactNode }) => {
             auth?.updateAuthenticated(false);
             auth?.updateUser("", "");
             setLoading(false);
+            openAlert("Error!", error.response.data.message);
           } else {
             auth?.updateAuthenticated(false);
             auth?.updateUser("", "");
@@ -50,9 +47,9 @@ const Protected = ({ children }: { children: React.ReactNode }) => {
       }
     };
     if (auth?.authenticated) setLoading(false);
-    else if (getLocalStorage("JwtToken"))
-      verifyToken(getLocalStorage("JwtToken"));
-    else {
+    try {
+      verifyToken();
+    } catch (error) {
       navigate("/signin");
     }
   }, []);
