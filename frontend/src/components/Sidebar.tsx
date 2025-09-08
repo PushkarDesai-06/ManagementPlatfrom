@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Class from "./Class";
 import axios from "../lib/axios";
 import { FaNoteSticky } from "react-icons/fa6";
 import { motion } from "framer-motion";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { AuthContext } from "../context/authcontext";
-import { CgListTree } from "react-icons/cg";
 import { useQuery } from "@tanstack/react-query";
 import { LoaderIcon } from "lucide-react";
 import { IoAdd } from "react-icons/io5";
@@ -14,8 +12,7 @@ const Sidebar = () => {
   const arr = ["title 1", "title 2", "title 3", "title 4", "title 5"];
   const [openIdx, setOpenIdx] = useState<number>(-1);
   const [activeFolder, setActiveFolder] = useState<number>(0);
-  const { getLocalStorage } = useLocalStorage();
-  const [folders, setFolders] = useState<string[]>([]);
+  const [folders, setFolders] = useState<{ id: String; name: string }[]>([]);
   const auth = useContext(AuthContext);
 
   const getFolders = async () => {
@@ -74,7 +71,7 @@ const Sidebar = () => {
                 folders.map((elem, idx) => (
                   <Class
                     key={idx}
-                    title={elem}
+                    title={elem.name}
                     index={idx}
                     openIdx={openIdx}
                     setOpenIdx={setOpenIdx}

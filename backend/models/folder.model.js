@@ -5,8 +5,8 @@ const folderSchema = mongoose.Schema(
     email: { type: String, required: true },
     folders: [
       {
-        type: String,
-        required: true,
+        id: { type: String, required: true },
+        name: { type: String, required: true },
       },
     ],
   },

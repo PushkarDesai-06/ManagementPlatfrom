@@ -3,7 +3,6 @@ import { User } from "../models/user.model.js";
 
 export const authorizeJWT = async (req, res, next) => {
   const JWT_SECRET = process.env.JWT_SECRET;
-  console.log(req.cookies);
   if (!req.cookies.token) {
     return res
       .status(401)
@@ -21,14 +20,13 @@ export const authorizeJWT = async (req, res, next) => {
     } catch (error) {
       console.log(error);
       if (error.name === "TokenExpiredError") {
-        res.status(401).json({
+        return res.status(401).json({
           authenticated: false,
           message: "JTW Token expired",
         });
-        return;
       }
 
-      res.status(401).json({
+      return res.status(401).json({
         authenticated: false,
         message: "Server Error, Please try again later.",
       });

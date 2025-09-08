@@ -61,7 +61,7 @@ const Todo = ({ text = "Lorem ipsum dolor sit, amet consectetur" }) => {
         <input
           ref={todoRef}
           disabled={!isEditable}
-          className={`flex items-center w-ful outline-0 
+          className={`flex items-center w-[90%] outline-0 
             `}
           value={todoText}
           onChange={(e) => setTodoText(e.target.value)}
