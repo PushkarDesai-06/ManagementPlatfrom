@@ -49,20 +49,13 @@ todoRouter.post("/changefoldername", authorizeJWT, async (req, res) => {
   const { email } = req.headers.user;
   const { id, newName } = req.body;
   try {
-    const oldFolders = await folderModel.findOne({ email });
-    const changedFolders = oldFolders.folders.map((elem) => {
-      if (elem.id === id) return { id: elem.id, name: newName };
-      return elem;
-    });
-    const updatedFolders = await folderModel.findOneAndUpdate(
-      { email },
-      {
-        folders: changedFolders,
-      },
-      { new: true }
+    const isAcknowldged = await folderModel.updateOne(
+      { email, "folders.id": id },
+      { $set: { "folders.$.name": newName } }
     );
+    console.log(isAcknowldged);
 
-    res.json(updatedFolders);
+    res.json(isAcknowldged);
   } catch (error) {
     console.log(error);
   }
