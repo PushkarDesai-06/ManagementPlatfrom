@@ -1,9 +1,12 @@
+import { MdEdit, MdEditOff } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CgAddR } from "react-icons/cg";
 import { createPortal } from "react-dom";
+import { useEditFolderNameMutation } from "../queries/folderqueries";
 
-const Class = ({
+const Folder = ({
+  id,
   title = "title",
   description = "description",
   index = 0,
@@ -12,6 +15,7 @@ const Class = ({
   activeFolder,
   setActiveFolder,
 }: {
+  id: string;
   title?: string;
   description?: string;
   index: number;
@@ -20,8 +24,9 @@ const Class = ({
   setOpenIdx: (idx: number) => void;
   setActiveFolder: (idx: number) => void;
 }) => {
-  const [showDescription, setShowDescription] = useState<boolean>(false);
-
+  const updateFolderName = useEditFolderNameMutation();
+  const [folderTitle, setFolderTitle] = useState<string>(title);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
   return (
     <>
       <motion.div
@@ -38,33 +43,35 @@ const Class = ({
           setActiveFolder(index);
         }}
       >
-        <div className="flex-1">{title}</div>
+        <form
+          onSubmit={(e) => {
+            setIsEditable(false);
+            e.preventDefault();
+            updateFolderName({ id: id, newName: folderTitle });
+          }}
+          className=""
+        >
+          <input
+            className="w-full"
+            value={folderTitle}
+            disabled={!isEditable}
+            maxLength={25}
+            minLength={1}
+            required={true}
+            onChange={(e) => setFolderTitle(e.target.value)}
+          />
+        </form>
         <button
           className="cursor-pointer"
           onClick={(e) => {
-            e.stopPropagation();
-            if (openIdx === index) setOpenIdx(-1);
-            else setOpenIdx(index);
+            setIsEditable((prev) => !prev);
           }}
         >
-          <CgAddR />
+          {isEditable ? <MdEditOff /> : <MdEdit />}
         </button>
-        <AnimatePresence>
-          {openIdx === index && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              exit={{ opacity: 0 }}
-              className="p-4 top-0 absolute right-0 backdrop-blur-2xl  rounded-md px-2 py-1 border border-neutral-400/30 text-sm z-50"
-            >
-              {description}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.div>
     </>
   );
 };
 
-export default Class;
+export default Folder;

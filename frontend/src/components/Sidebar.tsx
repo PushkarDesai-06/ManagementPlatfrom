@@ -1,38 +1,25 @@
 import { useContext, useEffect, useState } from "react";
-import Class from "./Class";
-import axios from "../lib/axios";
+import Folder from "./Folder";
 import { FaNoteSticky } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { AuthContext } from "../context/authcontext";
-import { useQuery } from "@tanstack/react-query";
 import { LoaderIcon } from "lucide-react";
 import { IoAdd } from "react-icons/io5";
+import {
+  useAddFolderMutation,
+  useGetFoldersQuery,
+} from "../queries/folderqueries";
 
 const Sidebar = () => {
   const arr = ["title 1", "title 2", "title 3", "title 4", "title 5"];
   const [openIdx, setOpenIdx] = useState<number>(-1);
   const [activeFolder, setActiveFolder] = useState<number>(0);
   const [folders, setFolders] = useState<{ id: String; name: string }[]>([]);
+  const [newFolderName, setNewFolderName] = useState("NewFolder");
   const auth = useContext(AuthContext);
 
-  const getFolders = async () => {
-    try {
-      const req = await axios.get("/todo/folders");
-      console.log(req.data.folders);
-      setFolders(req.data.folders);
-      return req.data.folders;
-    } catch (error) {
-      console.log(error);
-      return error;
-    }
-  };
-
-  const addFolder = () => {};
-
-  const { data, isPending } = useQuery({
-    queryKey: ["folders"],
-    queryFn: getFolders,
-  });
+  const { data, isPending } = useGetFoldersQuery();
+  const mutate = useAddFolderMutation();
 
   useEffect(() => {
     const handleClick = () => {
@@ -57,7 +44,10 @@ const Sidebar = () => {
       </div>
       <div className="text-sm font-ubuntu text-neutral-700/90 pl-4 mb-2 flex justify-between">
         <div>Folders</div>
-        <button className="cursor-pointer text-md" onClick={addFolder}>
+        <button
+          className="cursor-pointer text-md"
+          onClick={() => mutate(newFolderName)}
+        >
           <IoAdd />
         </button>
       </div>
@@ -67,9 +57,10 @@ const Sidebar = () => {
             <LoaderIcon />
           ) : (
             <>
-              {folders.length > 0 ? (
-                folders.map((elem, idx) => (
-                  <Class
+              {data.length > 0 ? (
+                data.map((elem: { id: String; name: String }, idx: number) => (
+                  <Folder
+                    id={elem.id}
                     key={idx}
                     title={elem.name}
                     index={idx}

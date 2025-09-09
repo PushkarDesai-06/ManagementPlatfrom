@@ -123,6 +123,7 @@ const SignIn = () => {
               name=""
               id="email"
               value={formData.email}
+              autoFocus={true}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, email: e.target.value }))
               }
