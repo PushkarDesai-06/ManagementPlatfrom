@@ -11,7 +11,7 @@ import {
 } from "../queries/folderqueries";
 
 const Sidebar = () => {
-  const arr = ["title 1", "title 2", "title 3", "title 4", "title 5"];
+  // const arr = ["title 1", "title 2", "title 3", "title 4", "title 5"];
   const [openIdx, setOpenIdx] = useState<number>(-1);
   const [activeFolder, setActiveFolder] = useState<number>(0);
   const [folders, setFolders] = useState<{ id: String; name: string }[]>([]);
@@ -52,13 +52,13 @@ const Sidebar = () => {
         </button>
       </div>
       <div className="flex flex-col gap-4 overflow-y-auto items-center">
-        <div className="w-3xs p-4 flex flex-col gap-2 overflow-y-auto scrollbar-thin">
+        <div className="w-3xs p-4 flex flex-col gap-2 h-72 overflow-y-auto scrollbar-none bg-neutral-200 rounded-lg">
           {isPending ? (
             <LoaderIcon />
           ) : (
             <>
               {data.length > 0 ? (
-                data.map((elem: { id: String; name: String }, idx: number) => (
+                data.map((elem: { id: string; name: string }, idx: number) => (
                   <Folder
                     id={elem.id}
                     key={idx}

@@ -14,7 +14,7 @@ export const useAddFolderMutation = () => {
   const { isPending, mutate } = useMutation({
     mutationFn: addFolder,
     onSuccess: () => {
-      queryClient.invalidateQueries("folders");
+      queryClient.invalidateQueries({ queryKey: ["folders"] });
     },
     onError: () => {
       throw new Error("Faile to fetch Folders");
@@ -29,7 +29,7 @@ export const useEditFolderNameMutation = () => {
   const { mutate } = useMutation({
     mutationFn: changeFolderName,
     onSuccess: () => {
-      queryClient.invalidateQueries("folders");
+      queryClient.invalidateQueries({ queryKey: ["folders"] });
     },
     onError: () => {
       throw new Error("Could not change folder name");

@@ -2,7 +2,7 @@ import axios from "../lib/axios";
 
 export const getFolders = async () => {
   try {
-    const req = await axios.get("/todo/folders");
+    const req = await axios.get("/folder");
     // console.log(req.data.folders);
     if (req.data.folders) return req.data.folders;
     return [];
@@ -14,7 +14,7 @@ export const getFolders = async () => {
 
 export const addFolder = async (name: String) => {
   try {
-    const updatedFolders = await axios.post("/todo/addfolder", { name });
+    const updatedFolders = await axios.post("/folder/addfolder", { name });
     return updatedFolders;
   } catch (error) {
     console.log(error);
@@ -30,7 +30,7 @@ export const changeFolderName = async ({
   newName: string;
 }) => {
   try {
-    const updatedFolders = await axios.post("/todo/changefoldername", {
+    const updatedFolders = await axios.post("/folder/changefoldername", {
       id,
       newName,
     });

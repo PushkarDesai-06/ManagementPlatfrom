@@ -3,8 +3,9 @@ import cors from "cors";
 import "dotenv/config";
 import connectDb from "./db.js";
 import { router as authRouter } from "./routes/auth.js";
-import { todoRouter } from "./routes/todos.js";
+import { folderRouter } from "./routes/folders.js";
 import cookieParser from "cookie-parser";
+import { todoRouter } from "./routes/todo.js";
 
 const app = express();
 
@@ -19,17 +20,9 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
-  const name = req.query.name;
-  if (name) {
-    res.send(`Hello ${name}`);
-  } else {
-    res.send("Hello World");
-  }
-});
-
 app.use("/auth", authRouter); // handle all auth
-app.use("/todo", todoRouter);
+app.use("/folder", folderRouter); //Handle all requests related to folders
+app.use("/todo", todoRouter); // Handles all requests related to todos
 
 app.listen(8000, () => {
   console.log("SERVER STARTED");

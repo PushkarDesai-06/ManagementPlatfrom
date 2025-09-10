@@ -2,9 +2,10 @@ import express from "express";
 import { authorizeJWT } from "../middlewares/authorize.js";
 import folderModel from "../models/folder.model.js";
 import { nanoid } from "nanoid";
-export const todoRouter = express.Router();
+export const folderRouter = express.Router();
 
-todoRouter.get("/folders", authorizeJWT, async (req, res) => {
+// returns all folders for a particular email
+folderRouter.get("/", authorizeJWT, async (req, res) => {
   const { email } = req.headers.user;
   try {
     const data = await folderModel.findOne({ email });
@@ -15,7 +16,7 @@ todoRouter.get("/folders", authorizeJWT, async (req, res) => {
   }
 });
 
-todoRouter.post("/addfolder", authorizeJWT, async (req, res) => {
+folderRouter.post("/addfolder", authorizeJWT, async (req, res) => {
   const email = req.headers.user.email;
   const name = req.body.name;
   const folderId = nanoid();
@@ -37,7 +38,6 @@ todoRouter.post("/addfolder", authorizeJWT, async (req, res) => {
       { folders: prev.folders },
       { new: true }
     );
-    console.log(updatedFolders);
     return res.json(updatedFolders);
   } catch (error) {
     console.log(error);
@@ -45,7 +45,7 @@ todoRouter.post("/addfolder", authorizeJWT, async (req, res) => {
   }
 });
 
-todoRouter.post("/changefoldername", authorizeJWT, async (req, res) => {
+folderRouter.post("/changefoldername", authorizeJWT, async (req, res) => {
   const { email } = req.headers.user;
   const { id, newName } = req.body;
   try {

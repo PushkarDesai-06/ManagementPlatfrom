@@ -36,8 +36,8 @@ const Folder = ({
           delay: (index * 1) / 10,
           duration: 0.2,
         }}
-        className={`rounded-md flex p-2 bg-neutral-200 w-full relative hover:bg-neutral-300 transition items-center ${
-          activeFolder === index && "bg-neutral-300"
+        className={`rounded-md flex p-2 bg-neutral-300 w-full relative hover:bg-neutral-400 transition items-center ${
+          activeFolder === index && "bg-neutral-400"
         }`}
         onClick={(e) => {
           setActiveFolder(index);
