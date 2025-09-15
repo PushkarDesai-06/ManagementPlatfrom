@@ -2,12 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useDeleteTodoMutation } from "../queries/todoqueries";
 
-const Todo = ({ text = "Lorem ipsum dolor sit, amet consectetur" }) => {
+const Todo = ({
+  text = "Lorem ipsum dolor sit, amet consectetur",
+  todoId: string,
+}) => {
   const [showOptions, setShowOptins] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [todoText, setTodoText] = useState<string>(text);
+  const { mutate: deleteMutate, isPending } = useDeleteTodoMutation();
 
   const handleOptionsClick = () => {
     setShowOptins((prev) => !prev);
@@ -30,7 +35,7 @@ const Todo = ({ text = "Lorem ipsum dolor sit, amet consectetur" }) => {
 
     return () => {
       window.removeEventListener("keydown", keyboardEventListener);
-      console.log("removed");
+      // console.log("removed");
     };
   }, [isEditable]);
 
@@ -45,6 +50,10 @@ const Todo = ({ text = "Lorem ipsum dolor sit, amet consectetur" }) => {
       window.removeEventListener("click", () => mouseClickHandler());
     };
   }, []);
+
+  const handleDelete = () => {
+    deleteMutate(todoId);
+  };
 
   return (
     <motion.div
@@ -72,9 +81,11 @@ const Todo = ({ text = "Lorem ipsum dolor sit, amet consectetur" }) => {
         <motion.div
           initial={{ opacity: 0, scaleY: 0 }}
           animate={{ opacity: 1, scaleY: 1 }}
-          className="flex flex-col gap-2 border py-2 rounded-lg px-2 absolute right-0 top-6 backdrop-blur-sm  origin-top z-10"
+          className="flex flex-col gap-2 border py-2 rounded-lg px-2 absolute right-0 top-full mt-1 backdrop-blur-sm  origin-top z-10"
         >
-          <MdDelete className="cursor-pointer" />
+          <button onClick={handleDelete}>
+            <MdDelete className="cursor-pointer" />
+          </button>
           <MdModeEdit
             className="cursor-pointer"
             onClick={() => setIsEditable((prev) => !prev)}

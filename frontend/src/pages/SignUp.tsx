@@ -41,7 +41,10 @@ const SignUp = () => {
       }
     } catch (error) {
       auth?.updateAuthenticated(false);
-      openAlert("Server Error" , 'Could not connect to server. Please try again later');
+      openAlert(
+        "Server Error",
+        "Could not connect to server. Please try again later"
+      );
     }
   };
 
@@ -130,7 +133,10 @@ const SignUp = () => {
             className=" p-2 rounded-md mb-4 text-white/90 ring-1 ring-white/30"
           />
 
-          <button className="bg-orange-300/10 rounded-xl w-full mb-2">
+          <button
+            className="bg-orange-300/10 rounded-xl w-full mb-2"
+            disabled={loading}
+          >
             <h1 className="border p-2 px-4 rounded-xl text-neutral-200">{`${
               loading ? "loading..." : "Sign Up"
             }`}</h1>

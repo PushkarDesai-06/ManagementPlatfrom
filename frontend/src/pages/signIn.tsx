@@ -154,7 +154,10 @@ const SignIn = () => {
                 Wrong username or password!
               </h1>
             )}
-            <button className="bg-green-300/10 rounded-xl w-full mb-2">
+            <button
+              className="bg-green-300/10 rounded-xl w-full mb-2"
+              disabled={loading}
+            >
               <h1 className="border p-2 px-4 rounded-xl text-neutral-200">{`${
                 loading ? "loading..." : "Sign In"
               }`}</h1>

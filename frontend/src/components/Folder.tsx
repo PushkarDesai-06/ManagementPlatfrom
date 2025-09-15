@@ -1,9 +1,10 @@
 import { MdEdit, MdEditOff } from "react-icons/md";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CgAddR } from "react-icons/cg";
 import { createPortal } from "react-dom";
 import { useEditFolderNameMutation } from "../queries/folderqueries";
+import { FolderContext } from "../context/folderContext";
 
 const Folder = ({
   id,
@@ -27,6 +28,7 @@ const Folder = ({
   const updateFolderName = useEditFolderNameMutation();
   const [folderTitle, setFolderTitle] = useState<string>(title);
   const [isEditable, setIsEditable] = useState<boolean>(false);
+  const { changeActiveFolder } = useContext(FolderContext);
   return (
     <>
       <motion.div
@@ -41,6 +43,7 @@ const Folder = ({
         }`}
         onClick={(e) => {
           setActiveFolder(index);
+          changeActiveFolder(id);
         }}
       >
         <form

@@ -2,34 +2,27 @@ import { useContext, useEffect, useState } from "react";
 import Folder from "./Folder";
 import { FaNoteSticky } from "react-icons/fa6";
 import { motion } from "framer-motion";
-import { AuthContext } from "../context/authcontext";
 import { LoaderIcon } from "lucide-react";
 import { IoAdd } from "react-icons/io5";
 import {
   useAddFolderMutation,
   useGetFoldersQuery,
 } from "../queries/folderqueries";
+import { FolderContext } from "../context/folderContext";
 
 const Sidebar = () => {
-  // const arr = ["title 1", "title 2", "title 3", "title 4", "title 5"];
   const [openIdx, setOpenIdx] = useState<number>(-1);
   const [activeFolder, setActiveFolder] = useState<number>(0);
-  const [folders, setFolders] = useState<{ id: String; name: string }[]>([]);
-  const [newFolderName, setNewFolderName] = useState("NewFolder");
-  const auth = useContext(AuthContext);
-
+  const [newFolderName] = useState("NewFolder");
+  const { changeActiveFolder } = useContext(FolderContext); // Add this
   const { data, isPending } = useGetFoldersQuery();
   const mutate = useAddFolderMutation();
 
   useEffect(() => {
-    const handleClick = () => {
-      setOpenIdx(-1);
-    };
-    document.addEventListener("click", handleClick);
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  }, []);
+    if (data && data.length > 0 && activeFolder >= 0) {
+      changeActiveFolder(data[activeFolder]?.id || "");
+    }
+  }, [activeFolder, data, changeActiveFolder]);
 
   return (
     <motion.aside

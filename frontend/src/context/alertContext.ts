@@ -1,6 +1,6 @@
 import React from "react";
 
-export type AlertContextInterface = {
+export type AlertContextType = {
   alert: {
     title: string;
     message: string;
@@ -11,7 +11,7 @@ export type AlertContextInterface = {
   showAlert: boolean;
 };
 
-export const AlertContext = React.createContext<AlertContextInterface>({
+export const AlertContext = React.createContext<AlertContextType>({
   alert: {
     title: "",
     message: "",

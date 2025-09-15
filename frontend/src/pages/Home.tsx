@@ -1,7 +1,5 @@
-import PillNav from "../blocks/Components/PillNav/PillNav";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import Todo from "../components/Todo";
 import TodoList from "../components/TodoList";
 
 const Home = () => {
