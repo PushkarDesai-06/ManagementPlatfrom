@@ -5,7 +5,8 @@ import { useAddTodoMutation, useGetTodoQuery } from "../queries/todoqueries";
 export const FloatingInput = () => {
   const [newTodoValue, setNewTodoValue] = useState("");
 
-  const { mutate: addTodoMutation } = useAddTodoMutation();
+  const { mutate: addTodoMutation, isPending: isAddTodoPending } =
+    useAddTodoMutation();
 
   const addTodo = (content: string) => {
     addTodoMutation(content);
@@ -30,7 +31,7 @@ export const FloatingInput = () => {
           className="flex-1 rounded-2xl px-4 py-2 outline-0 w-full h-fit overflow-hidden"
         />
         <div className="flex justify-end w-full">
-          <button className="cursor-pointer">
+          <button className="cursor-pointer" disabled={isAddTodoPending}>
             <IoAddCircle size={"28px"} />
           </button>
         </div>

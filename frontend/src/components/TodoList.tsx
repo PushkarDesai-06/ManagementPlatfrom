@@ -41,7 +41,6 @@ const TodoList = () => {
           <Loader className="animate-spin" />
         </div>
       )}
-      <FloatingInput />
     </div>
   );
 };

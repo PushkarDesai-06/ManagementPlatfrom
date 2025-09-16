@@ -7,7 +7,7 @@ import { useDeleteTodoMutation } from "../queries/todoqueries";
 
 const Todo = ({
   text = "Lorem ipsum dolor sit, amet consectetur",
-  todoId: string,
+  todoId,
 }) => {
   const [showOptions, setShowOptins] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);

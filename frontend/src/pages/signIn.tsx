@@ -159,7 +159,7 @@ const SignIn = () => {
               disabled={loading}
             >
               <h1 className="border p-2 px-4 rounded-xl text-neutral-200">{`${
-                loading ? "loading..." : "Sign In"
+                loading ? "Signing In..." : "Sign In"
               }`}</h1>
             </button>
             <div className="text-neutral-300  text-center">
