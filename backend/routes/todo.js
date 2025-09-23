@@ -11,8 +11,9 @@ todoRouter.get("/", authorizeJWT, async (req, res) => {
   const folderId = req.query.folderId;
 
   try {
-    const response = await todoModel.find({ email, folderId }).select("todos");
-    console.log(response);
+    const response = await todoModel
+      .findOne({ email, folderId })
+      .select("todos");
     if (!response) return res.json([]);
     return res.json(response);
   } catch (error) {

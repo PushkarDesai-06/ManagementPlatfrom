@@ -16,3 +16,14 @@ export type ProfileCardProps = {
   description?: string;
   pfpUrl?: string;
 };
+
+export type TodoProps = {
+  text: string;
+  todoId: string;
+  date: Date;
+};
+
+export type OptionsProps = {
+  setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
+  todoId: string;
+};

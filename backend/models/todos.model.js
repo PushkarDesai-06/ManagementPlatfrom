@@ -13,7 +13,9 @@ const todoSchema = mongoose.Schema(
       },
     ],
   },
-  { collection: "Todo" }
+  { collection: "Todo" ,
+    timestamps : true
+  }
 );
 
 const todoModel = mongoose.model("todoModel", todoSchema);

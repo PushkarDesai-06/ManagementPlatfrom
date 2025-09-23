@@ -1,8 +1,5 @@
-import React, { useState } from "react";
 import Todo from "./Todo";
-import { IoAddCircle } from "react-icons/io5";
 import { useGetTodoQuery } from "../queries/todoqueries";
-import { FloatingInput } from "./FloatingInput";
 import { Loader } from "lucide-react";
 
 const TodoList = () => {
@@ -20,7 +17,7 @@ const TodoList = () => {
   } = useGetTodoQuery();
   console.log(todosData);
 
-  const todos = todosData?.[0]?.todos || [];
+  const todos = todosData?.todos || [];
 
   if (isGetTodoPending)
     return (
@@ -31,13 +28,15 @@ const TodoList = () => {
 
   return (
     <div className="flex flex-col gap-2 p-4">
-      {todos.map((todo: todoType) => {
+      {todos.length > 0 ? todos.map((todo: todoType) => {
         return (
-          <Todo key={todo.todoId} text={todo.content} todoId={todo.todoId} />
+          <Todo key={todo.todoId} text={todo.content} todoId={todo.todoId} date={todo.createdAt} />
         );
-      })}
+      }) : (<div className="text-lg text-neutral-600 font-ubuntu">
+        <span className="font-semibold">No Todos!</span> Add your first one.
+      </div>)}
       {isFetching && (
-        <div className="my-8">
+        <div className="my-8 flex justify-center">
           <Loader className="animate-spin" />
         </div>
       )}

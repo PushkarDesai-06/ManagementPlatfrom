@@ -3,6 +3,8 @@ import axios from "../lib/axios";
 export const getTodos = async (folderId: string) => {
   try {
     const res = await axios.get(`/todo?folderId=${folderId}`);
+    console.log("RESPONSE");
+    console.log(res.data);
     return res.data;
   } catch (error) {
     throw new Error("Error fetching todos");

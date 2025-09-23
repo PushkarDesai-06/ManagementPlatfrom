@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addFolder, changeFolderName, getFolders } from "../api/folders";
+import {
+  addFolder,
+  changeFolderName,
+  deleteFolder,
+  getFolders,
+} from "../api/folders";
 
 export const useGetFoldersQuery = () => {
   const { data, isPending } = useQuery({
@@ -17,11 +22,11 @@ export const useAddFolderMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["folders"] });
     },
     onError: () => {
-      throw new Error("Faile to fetch Folders");
+      throw new Error("Failed to fetch Folders");
     },
   });
 
-  return mutate;
+  return { mutate, isPending };
 };
 
 export const useEditFolderNameMutation = () => {
@@ -36,4 +41,18 @@ export const useEditFolderNameMutation = () => {
     },
   });
   return mutate;
+};
+
+export const useDeleteFolderMutation = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: deleteFolder,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["folders"] });
+    },
+    onError: () => {
+      throw new Error("Could Not Delete Folder");
+    },
+  });
+  return { mutate, isPending };
 };

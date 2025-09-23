@@ -9,6 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 import Account from "./pages/Account";
 import Todo from "./components/TodoList";
 import CombinedContextProvider from "./context/CombinedContextProvider";
+import Notes from "./components/Notes";
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
             }
           />
 
-          <Route path="/temp" element={<Todo />} />
+          <Route path="/temp" element={<Notes />} />
         </Routes>
       </BrowserRouter>
     </CombinedContextProvider>

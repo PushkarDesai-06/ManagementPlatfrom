@@ -10,12 +10,6 @@ const Account = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const handleEditClick = (e: React.MouseEvent) => {};
-  const handleLogout = async () => {
-    auth?.updateAuthenticated(false);
-    auth?.updateUser("", "");
-    await axios.get("/auth/logout");
-    navigate("/signin");
-  };
 
   return (
     <div className="flex flex-col">

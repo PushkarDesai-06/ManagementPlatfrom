@@ -1,18 +1,13 @@
 import { MdEdit, MdEditOff } from "react-icons/md";
-import React, { useContext, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { CgAddR } from "react-icons/cg";
-import { createPortal } from "react-dom";
+import { useContext, useState } from "react";
+import { motion } from "framer-motion";
 import { useEditFolderNameMutation } from "../queries/folderqueries";
 import { FolderContext } from "../context/folderContext";
 
 const Folder = ({
   id,
   title = "title",
-  description = "description",
   index = 0,
-  openIdx = index,
-  setOpenIdx,
   activeFolder,
   setActiveFolder,
 }: {
@@ -41,7 +36,7 @@ const Folder = ({
         className={`rounded-md flex p-2 bg-neutral-300 w-full relative hover:bg-neutral-400 transition items-center ${
           activeFolder === index && "bg-neutral-400"
         }`}
-        onClick={(e) => {
+        onClickCapture={() => {
           setActiveFolder(index);
           changeActiveFolder(id);
         }}
@@ -55,9 +50,10 @@ const Folder = ({
           className=""
         >
           <input
-            className="w-full"
+            onClick={() => console.log("clicked!!")}
+            className="w-full outline-none"
             value={folderTitle}
-            disabled={!isEditable}
+            readOnly={!isEditable}
             maxLength={25}
             minLength={1}
             required={true}
@@ -67,6 +63,7 @@ const Folder = ({
         <button
           className="cursor-pointer"
           onClick={(e) => {
+            e.stopPropagation();
             setIsEditable((prev) => !prev);
           }}
         >

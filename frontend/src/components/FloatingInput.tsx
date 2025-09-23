@@ -13,7 +13,7 @@ export const FloatingInput = () => {
   };
 
   return (
-    <div className="border backdrop-blur-2xl flex flex-col rounded-2xl overflow-hidden absolute bottom-4 min-w-sm w-lg left-1/2">
+    <div className="border backdrop-blur-2xl flex flex-col rounded-2xl overflow-hidden absolute bottom-4 min-w-sm w-xl">
       <form
         action=""
         onSubmit={(e) => {
@@ -25,6 +25,8 @@ export const FloatingInput = () => {
         <input
           name=""
           id=""
+          required={true}
+          minLength={3}
           placeholder="Add your todo here!"
           value={newTodoValue}
           onChange={(e) => setNewTodoValue(e.target.value)}

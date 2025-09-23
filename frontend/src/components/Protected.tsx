@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AlertContext } from "../context/alertContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { isAxiosError } from "axios";
+import { Loader } from "lucide-react";
 
 const Protected = ({ children }: { children: React.ReactNode }) => {
   const auth = useContext(AuthContext);
@@ -54,7 +55,13 @@ const Protected = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  return loading ? <div>loading...</div> : <>{children}</>;
+  return loading ? (
+    <div className="flex justify-center items-center w-screen h-screen">
+      <Loader className="animate-spin" />
+    </div>
+  ) : (
+    <>{children}</>
+  );
 };
 
 export default Protected;
