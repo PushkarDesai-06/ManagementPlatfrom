@@ -1,5 +1,5 @@
 import { MdEdit, MdEditOff } from "react-icons/md";
-import { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useEditFolderNameMutation } from "../queries/folderqueries";
 import { FolderContext } from "../context/folderContext";
@@ -24,6 +24,7 @@ const Folder = ({
   const [folderTitle, setFolderTitle] = useState<string>(title);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const { changeActiveFolder } = useContext(FolderContext);
+  const inputRef = useRef<null | HTMLInputElement>(null);
   return (
     <>
       <motion.div
@@ -50,7 +51,7 @@ const Folder = ({
           className=""
         >
           <input
-            onClick={() => console.log("clicked!!")}
+            ref={inputRef}
             className="w-full outline-none"
             value={folderTitle}
             readOnly={!isEditable}
@@ -64,7 +65,12 @@ const Folder = ({
           className="cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
-            setIsEditable((prev) => !prev);
+            setIsEditable((prev) => {
+              if (!prev) {
+                inputRef?.current?.focus();
+              }
+              return !prev;
+            });
           }}
         >
           {isEditable ? <MdEditOff /> : <MdEdit />}

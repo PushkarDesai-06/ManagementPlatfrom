@@ -63,8 +63,8 @@ const Todo = ({
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8 }}
-      className={`border w-xl flex px-2 items-center rounded-md relative
-            ${isEditable && "bg-neutral-200"}
+      className={`border w-xl flex px-2 items-center rounded-full relative  text-neutral-200
+            ${isEditable ? "bg-neutral-200" : 'bg-neutral-800'}
         `}
     >
       <div className="border-r px-2 mr-2 w-20 text-sm text-neutral-600">
@@ -78,7 +78,7 @@ const Todo = ({
         <input
           ref={todoRef}
           disabled={!isEditable}
-          className={`flex items-center w-[90%] outline-0 cursor-default 
+          className={`flex items-center w-[90%] outline-0 cursor-default
             `}
           value={todoText}
           onChange={(e) => setTodoText(e.target.value)}
