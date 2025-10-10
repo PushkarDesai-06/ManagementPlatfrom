@@ -28,14 +28,16 @@ const Folder = ({
   return (
     <>
       <motion.div
-        initial={{ scale: 0, opacity: 0, y: -30 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
         transition={{
           delay: (index * 1) / 10,
           duration: 0.2,
         }}
-        className={`rounded-md flex p-2 bg-neutral-300 w-full relative hover:bg-neutral-400 transition items-center ${
-          activeFolder === index && "bg-neutral-400"
+        className={`rounded-lg flex px-3 py-2 w-full relative hover:bg-[#1a1625] transition items-center cursor-pointer ${
+          activeFolder === index
+            ? "bg-[#1a1625] border-l-2 border-[#7c6ba8]"
+            : "border-l-2 border-transparent"
         }`}
         onClickCapture={() => {
           setActiveFolder(index);
@@ -48,11 +50,13 @@ const Folder = ({
             e.preventDefault();
             updateFolderName({ id: id, newName: folderTitle });
           }}
-          className=""
+          className="flex-1"
         >
           <input
             ref={inputRef}
-            className="w-full outline-none"
+            className={`w-full outline-none bg-transparent text-sm ${
+              activeFolder === index ? "text-[#c4b8e0]" : "text-[#8b7fb8]"
+            }`}
             value={folderTitle}
             readOnly={!isEditable}
             maxLength={25}
@@ -62,7 +66,7 @@ const Folder = ({
           />
         </form>
         <button
-          className="cursor-pointer"
+          className="cursor-pointer text-[#6b5f88] hover:text-[#8b7fb8] transition text-sm"
           onClick={(e) => {
             e.stopPropagation();
             setIsEditable((prev) => {

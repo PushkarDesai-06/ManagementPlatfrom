@@ -1,102 +1,117 @@
 import React, { useContext, useEffect, useState } from "react";
 import Folder from "./Folder";
 import { FaNoteSticky } from "react-icons/fa6";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { AuthContext } from "../context/authcontext";
+import { FolderContext } from "../context/folderContext";
 import { LoaderIcon } from "lucide-react";
 import { IoAdd } from "react-icons/io5";
 import {
   useAddFolderMutation,
   useGetFoldersQuery,
 } from "../queries/folderqueries";
-import { FolderContext } from "../context/folderContext";
-import { AuthContext } from "../context/authcontext";
 import { useNavigate } from "react-router-dom";
-import axios from "../lib/axios";
 
 const Sidebar = () => {
   const [openIdx, setOpenIdx] = useState<number>(-1);
   const [activeFolder, setActiveFolder] = useState<number>(0);
-  const [newFolderName] = useState("NewFolder");
-  const { changeActiveFolder } = useContext(FolderContext); // Add this
-  const { data: folderData, isPending } = useGetFoldersQuery();
+  const [folders, setFolders] = useState<{ id: string; name: string }[]>([]);
+  const [newFolderName, setNewFolderName] = useState("NewFolder");
+  const auth = useContext(AuthContext);
+  const { changeActiveFolder, activeFolderId } = useContext(FolderContext);
+  const navigate = useNavigate();
+  const { data, isPending } = useGetFoldersQuery();
   const { mutate } = useAddFolderMutation();
 
-  const auth = React.useContext(AuthContext);
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if (folderData && folderData.length > 0 && activeFolder >= 0) {
-      changeActiveFolder(folderData[activeFolder]?.id || "");
-    }
-  }, [activeFolder, folderData, changeActiveFolder]);
+    if (data) {
+      setFolders(data);
 
-  const handleLogout = async () => {
-    auth?.updateAuthenticated(false);
-    auth?.updateUser("", "");
-    await axios.get("/auth/logout");
+      // Find the index of the active folder
+      const activeIndex = data.findIndex(
+        (folder: { id: string; name: string }) => folder.id === activeFolderId
+      );
+
+      if (activeIndex !== -1) {
+        setActiveFolder(activeIndex);
+      } else if (data.length > 0) {
+        // If active folder not found but we have folders, set first one
+        setActiveFolder(0);
+        changeActiveFolder(data[0].id);
+      }
+    }
+  }, [data, activeFolderId]);
+
+  const handleAddFolder = () => {
+    mutate(newFolderName);
+  };
+
+  const handleLogout = () => {
+    auth?.logout();
     navigate("/signin");
   };
 
+  if (isPending)
+    return (
+      <div className="min-h-screen w-80 bg-[#0f0b16] border-r border-[#1f1a2e] flex items-center justify-center">
+        <LoaderIcon className="animate-spin text-[#7c6ba8]" size={32} />
+      </div>
+    );
+
   return (
-    <AnimatePresence>
-      <motion.aside
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0, duration: 0.5 }}
-        exit={{ opacity: 0, x: -100 }}
-        className="h-screen max-w-xs p-4 flex flex-col shadow-xl bg-neutral-100 border-r border-r-neutral-300 origin-left"
-      >
-        <div className="px-4 mb-8">
-          {" "}
-          <FaNoteSticky className="text-2xl" />{" "}
-        </div>
-        <div className="text-sm font-ubuntu text-neutral-700/90 pl-4 mb-2 flex justify-between">
-          <div>Folders</div>
-          <button
-            className="cursor-pointer text-md"
-            onClick={() => mutate(newFolderName)}
-          >
-            <IoAdd />
-          </button>
-        </div>
-        <div className="flex flex-col gap-4 overflow-y-auto items-center">
-          <div className="w-3xs p-4 flex flex-col gap-2 h-72 overflow-y-auto scrollbar-none bg-neutral-200 rounded-lg">
-            {isPending ? (
-              <LoaderIcon />
-            ) : (
-              <>
-                {folderData.length > 0 ? (
-                  folderData.map(
-                    (elem: { id: string; name: string }, idx: number) => (
-                      <Folder
-                        id={elem.id}
-                        key={elem.id}
-                        title={elem.name}
-                        index={idx}
-                        openIdx={openIdx}
-                        setOpenIdx={setOpenIdx}
-                        activeFolder={activeFolder}
-                        setActiveFolder={setActiveFolder}
-                      />
-                    )
-                  )
-                ) : (
-                  <div className="text-sm text-neutral-600">
-                    No Folders Found. Create One!
-                  </div>
-                )}
-              </>
-            )}
+    <div className="min-h-screen w-80 bg-[#0f0b16] border-r border-[#1f1a2e] flex flex-col">
+      {/* Header */}
+      <div className="p-6 border-b border-[#1f1a2e]">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 rounded-lg bg-[#7c6ba8]">
+            <FaNoteSticky className="text-white" size={24} />
           </div>
-          <button
-            className="bottom-4 absolute border py-2 w-28 rounded-md bg-green-600 border-green-300 text-white cursor-pointer"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
+          <div>
+            <h1 className="text-xl font-semibold text-[#e8e3f5]">TaskFlow</h1>
+            <p className="text-xs text-[#6b5f88]">Organize your work</p>
+          </div>
         </div>
-      </motion.aside>
-    </AnimatePresence>
+
+        {/* Add Folder */}
+        <button
+          onClick={handleAddFolder}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#7c6ba8] hover:bg-[#8b7fb8] text-white transition font-medium text-sm"
+        >
+          <IoAdd size={20} />
+          New Folder
+        </button>
+      </div>
+
+      {/* Folders List */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="space-y-1">
+          {folders.map(
+            (folder: { id: string; name: string }, index: number) => (
+              <Folder
+                key={folder.id}
+                id={folder.id}
+                title={folder.name}
+                index={index}
+                openIdx={openIdx}
+                activeFolder={activeFolder}
+                setOpenIdx={setOpenIdx}
+                setActiveFolder={setActiveFolder}
+              />
+            )
+          )}
+        </div>
+      </div>
+
+      {/* Logout Button */}
+      <div className="p-4 border-t border-[#1f1a2e]">
+        <button
+          onClick={handleLogout}
+          className="w-full px-4 py-2.5 rounded-lg bg-[#1a1625] hover:bg-[#201a2e] text-[#c4b8e0] transition text-sm font-medium border border-[#2d2740]"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
   );
 };
 

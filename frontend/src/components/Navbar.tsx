@@ -4,7 +4,7 @@ import type { NavBarProps } from "../types/types";
 
 const Navbar = ({ activeHref }: NavBarProps) => {
   return (
-    <nav className="w-full flex justify-center mb-18">
+    <nav className="w-full flex justify-center mb-18 py-4">
       <PillNav
         logo={book}
         logoAlt="Company Logo"
@@ -16,10 +16,10 @@ const Navbar = ({ activeHref }: NavBarProps) => {
         ]}
         activeHref={activeHref}
         ease="power2.easeOut"
-        baseColor="#eeeeee"
-        pillColor="#111111"
-        hoveredPillTextColor="#222222"
-        pillTextColor="#ffffff"
+        baseColor="#1a1625"
+        pillColor="#7c6ba8"
+        hoveredPillTextColor="#a395c9"
+        pillTextColor="#e8e3f5"
         initialLoadAnimation={true}
       />
     </nav>

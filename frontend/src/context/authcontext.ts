@@ -6,6 +6,7 @@ interface AuthContextInterface {
   email?: string | null;
   updateUser: (name: string | null, email: string | null) => void;
   updateAuthenticated: (status: boolean) => void;
+  logout: () => void;
 }
 
 export const AuthContext = React.createContext<AuthContextInterface | null>(

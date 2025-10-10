@@ -13,7 +13,7 @@ export const FloatingInput = () => {
   };
 
   return (
-    <div className="border backdrop-blur-2xl flex flex-col rounded-2xl overflow-hidden absolute bottom-4 min-w-sm w-xl">
+    <div className="w-full max-w-4xl shadow-black shadow-lg z-50">
       <form
         action=""
         onSubmit={(e) => {
@@ -21,22 +21,25 @@ export const FloatingInput = () => {
           addTodo(newTodoValue);
           setNewTodoValue("");
         }}
+        className="flex items-center gap-3 bg-[#1a1625] border border-[#2d2740] rounded-lg p-3"
       >
         <input
           name=""
           id=""
           required={true}
           minLength={3}
-          placeholder="Add your todo here!"
+          placeholder="Add a new task..."
           value={newTodoValue}
           onChange={(e) => setNewTodoValue(e.target.value)}
-          className="flex-1 rounded-2xl px-4 py-2 outline-0 w-full h-fit overflow-hidden"
+          className="flex-1 px-3 py-2 outline-0 bg-transparent text-[#c4b8e0] placeholder-[#5a4f73] text-[15px]"
         />
-        <div className="flex justify-end w-full">
-          <button className="cursor-pointer" disabled={isAddTodoPending}>
-            <IoAddCircle size={"28px"} />
-          </button>
-        </div>
+        <button
+          className="cursor-pointer text-[#7c6ba8] hover:text-[#8b7fb8] transition p-2 rounded-lg hover:bg-[#201a2e]"
+          disabled={isAddTodoPending}
+          type="submit"
+        >
+          <IoAddCircle size={"24px"} />
+        </button>
       </form>
     </div>
   );

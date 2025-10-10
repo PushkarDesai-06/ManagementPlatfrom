@@ -12,28 +12,28 @@ const Alert = () => {
         createPortal(
           <AnimatePresence mode="wait">
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              exit={{ opacity: 0 , y : 0 }}
+              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, y: -10 }}
               className={
-                "absolute top-8 right-4 backdrop-blur-2xl outline-2 outline-neutral-600 p-1 px-4 text-white rounded-md min-w-sm overflow-hidden z-50 bg-neutral-800"
+                "absolute top-8 right-4 border border-[#2d2740] p-4 rounded-lg min-w-sm overflow-hidden z-50 bg-[#1a1625] shadow-xl"
               }
             >
               <button
-                className="absolute top-0 right-2 cursor-pointer z-10 hover:text-red-500 transition font-bold"
+                className="absolute top-2 right-2 cursor-pointer z-10 hover:text-[#c77272] transition font-bold text-[#6b5f88] text-lg leading-none"
                 onClick={closeAlert}
               >
-                x
+                ×
               </button>
-              <h1 className="text-md font-semibold  text-neutral-300 mb-1">
+              <h1 className="text-sm font-semibold text-[#e8e3f5] mb-1.5 pr-6">
                 {alert.title}
               </h1>
-              <p className="text-sm text-neutral-300 w-full rounded-sm border-neutral-500 mb-2">
+              <p className="text-sm text-[#8b7fb8] w-full mb-2">
                 {alert.message}
               </p>
-              <div className="absolute bottom-0 rounded-md left-0 w-full flex">
-                <div className="bg-neutral-300 h-[3px] w-full animate-shrink5s"></div>
+              <div className="absolute bottom-0 rounded-lg left-0 w-full flex">
+                <div className="bg-[#7c6ba8] h-[2px] w-full animate-shrink5s"></div>
               </div>
             </motion.div>
           </AnimatePresence>,

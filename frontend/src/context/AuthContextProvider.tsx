@@ -10,13 +10,25 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     setAuthenticated(status);
   };
 
+  const logout = () => {
+    updateAuthenticated(false);
+    updateUser("", "");
+  };
+
   const updateUser = (name: string | null, email: string | null) => {
     setName(name);
     setEmail(email);
   };
   return (
     <AuthContext.Provider
-      value={{ name, authenticated, email, updateUser, updateAuthenticated }}
+      value={{
+        name,
+        authenticated,
+        email,
+        updateUser,
+        updateAuthenticated,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>
