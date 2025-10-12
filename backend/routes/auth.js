@@ -42,7 +42,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const data = {
     name: req.body.name,
     email: req.body.email,
@@ -50,7 +50,9 @@ router.post("/register", (req, res) => {
   };
 
   try {
-    const user = User.createOne(data);
+    const userObj = new User(data);
+    const user = await userObj.save();
+    console.log(user);
     const payload = { name: user.name, email: user.email };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1hr" });
     res.cookie("token", token, {
@@ -60,6 +62,7 @@ router.post("/register", (req, res) => {
     });
     res.status(200).json({ message: "User Created" });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: error });
   }
 });

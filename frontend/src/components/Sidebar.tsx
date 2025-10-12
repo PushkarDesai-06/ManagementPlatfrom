@@ -75,7 +75,8 @@ const Sidebar = () => {
         {/* Add Folder */}
         <button
           onClick={handleAddFolder}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#7c6ba8] hover:bg-[#8b7fb8] text-white transition font-medium text-sm"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#7c6ba8] hover:bg-[#8b7fb8] !disabled:bg-[#584c76] text-white transition font-medium text-sm"
+          disabled={isPending}
         >
           <IoAdd size={20} />
           New Folder

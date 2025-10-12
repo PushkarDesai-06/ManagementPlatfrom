@@ -33,7 +33,7 @@ const SignUp = () => {
       e.preventDefault();
       const res = await axios.post("/auth/register", formData);
 
-      if (res.data.status == 200) {
+      if (res.status == 200) {
         navigate("/signin");
       } else {
         auth?.updateAuthenticated(false);
@@ -43,7 +43,7 @@ const SignUp = () => {
       auth?.updateAuthenticated(false);
       openAlert(
         "Server Error",
-        "Could not connect to server. Please try again later"
+        `Could not connect to server. Please try again later ${error}`
       );
     }
   };

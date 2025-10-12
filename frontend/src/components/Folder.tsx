@@ -72,6 +72,7 @@ const Folder = ({
             setIsEditable((prev) => {
               if (!prev) {
                 inputRef?.current?.focus();
+                inputRef?.current?.select();
               }
               return !prev;
             });
