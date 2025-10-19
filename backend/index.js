@@ -6,6 +6,7 @@ import { router as authRouter } from "./routes/auth.js";
 import { folderRouter } from "./routes/folders.js";
 import cookieParser from "cookie-parser";
 import { todoRouter } from "./routes/todo.js";
+import { pageRouter } from "./routes/pages.js";
 
 const app = express();
 
@@ -22,7 +23,8 @@ app.use(
 
 app.use("/auth", authRouter); // handle all auth
 app.use("/folder", folderRouter); //Handle all requests related to folders
-app.use("/todo", todoRouter); // Handles all requests related to todos
+app.use("/todo", todoRouter); // Handles all requests related to todos (LEGACY)
+app.use("/page", pageRouter); // Handles all requests related to pages (NEW)
 
 app.listen(8000, () => {
   console.log("SERVER STARTED");
