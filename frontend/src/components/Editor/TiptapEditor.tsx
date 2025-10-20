@@ -3,7 +3,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface TiptapEditorProps {
   content: any;
@@ -22,6 +22,8 @@ export const TiptapEditor = ({
   editable = true,
   onEditorReady,
 }: TiptapEditorProps) => {
+  const isUpdatingRef = useRef(false);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -48,7 +50,12 @@ export const TiptapEditor = ({
     content,
     editable,
     onUpdate: ({ editor }) => {
+      isUpdatingRef.current = true;
       onChange(editor.getJSON());
+      // Reset flag after a tick to allow the state update to propagate
+      setTimeout(() => {
+        isUpdatingRef.current = false;
+      }, 0);
     },
     autofocus: autoFocus,
     editorProps: {
@@ -65,10 +72,13 @@ export const TiptapEditor = ({
     }
   }, [editor, onEditorReady]);
 
+  // Sync content from parent, but only if not currently updating from user input
   useEffect(() => {
     if (
       editor &&
       content &&
+      !isUpdatingRef.current &&
+      !editor.isFocused &&
       JSON.stringify(editor.getJSON()) !== JSON.stringify(content)
     ) {
       editor.commands.setContent(content);

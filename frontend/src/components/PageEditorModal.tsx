@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { TiptapEditor } from "./Editor/TiptapEditor";
 import { EditorToolbar } from "./Editor/EditorToolbar";
 import {
@@ -34,17 +34,29 @@ export const PageEditorModal = ({
   const [editor, setEditor] = useState<Editor | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Load initial content
+  // Track if content has been initialized to prevent overwriting user input
+  const contentInitializedRef = useRef(false);
+  const currentPageIdRef = useRef<string | null>(null);
+
+  // Load initial content only once per page or when page changes
   useEffect(() => {
-    if (page) {
+    // Reset initialization flag when pageId changes
+    if (currentPageIdRef.current !== pageId) {
+      contentInitializedRef.current = false;
+      currentPageIdRef.current = pageId;
+    }
+
+    // Only initialize content once per page load
+    if (page && !contentInitializedRef.current) {
       setTitle(page.title);
       if (page.blocks && page.blocks.length > 0) {
         setContent(page.blocks[0].content);
       } else {
         setContent({ type: "doc", content: [] });
       }
+      contentInitializedRef.current = true;
     }
-  }, [page]);
+  }, [page, pageId]);
 
   // Autosave content
   useEffect(() => {
@@ -100,6 +112,12 @@ export const PageEditorModal = ({
     setIsFullscreen(!isFullscreen);
   };
 
+  const handleClose = () => {
+    // Reset initialization flag when closing modal
+    contentInitializedRef.current = false;
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -107,7 +125,7 @@ export const PageEditorModal = ({
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
-        onClick={onClose}
+        onClick={handleClose}
       />
 
       {/* Modal */}
@@ -146,10 +164,14 @@ export const PageEditorModal = ({
                 className="p-2 hover:bg-[#2d2740] rounded transition-colors text-[#c4b8e0]"
                 title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
               >
-                {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                {isFullscreen ? (
+                  <Minimize2 size={20} />
+                ) : (
+                  <Maximize2 size={20} />
+                )}
               </button>
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="p-2 hover:bg-[#2d2740] rounded transition-colors text-[#c4b8e0]"
                 title="Close"
               >

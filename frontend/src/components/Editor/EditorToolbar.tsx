@@ -38,7 +38,9 @@ export const EditorToolbar = ({ editor }: EditorToolbarProps) => {
     <button
       onClick={onClick}
       className={`p-2 rounded transition-colors ${
-        isActive ? "bg-blue-600 text-white" : "text-[#c4b8e0] hover:bg-[#2d2740]"
+        isActive
+          ? "bg-blue-600 text-white"
+          : "text-[#c4b8e0] hover:bg-[#2d2740]"
       }`}
       title={title}
       type="button"

@@ -15,7 +15,7 @@ export const PageList = () => {
   const { data: pages, isPending } = useGetPagesQuery();
   const { mutate: createPage, isPending: isCreating } = useCreatePageMutation();
   const { mutate: deletePage } = useDeletePageMutation();
-  
+
   const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
