@@ -14,8 +14,7 @@ const SignIn = () => {
   const auth = React.useContext(AuthContext);
   const { openAlert } = React.useContext(AlertContext);
   const navigate = useNavigate();
-  const { setLocalStorage, getLocalStorage, removeLocalStorage } =
-    useLocalStorage();
+  const { getLocalStorage, removeLocalStorage } = useLocalStorage();
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -47,8 +46,11 @@ const SignIn = () => {
     };
 
     if (auth?.authenticated) navigate("/");
-    else if (getLocalStorage("JwtToken")) {
-      verifyToken(getLocalStorage("JwtToken"));
+    else {
+      const token = getLocalStorage("JwtToken");
+      if (token) {
+        verifyToken();
+      }
     }
   }, []);
 

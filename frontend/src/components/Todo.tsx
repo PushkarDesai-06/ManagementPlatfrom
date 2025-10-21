@@ -21,7 +21,7 @@ const Todo = ({
   useEffect(() => {
     //handle the saving of the todos
     // escape to go back, enter to save
-    const keyboardEventListener = (e: React.KeyboardEvent) => {
+    const keyboardEventListener = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setTodoText(prevTodo.current);
         setIsEditable(false);

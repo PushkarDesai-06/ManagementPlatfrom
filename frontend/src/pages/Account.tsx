@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import Navbar from "../components/Navbar";
 import ProfileCard from "../components/ProfileCard";
 
@@ -13,6 +12,9 @@ const Account = () => {
           handleEditClick={handleEditClick}
           name="Joe Mama"
           handle="@mamajoe"
+          city="Mumbai"
+          countryCode="IN"
+          description="Managing my life, one task at a time"
         />
         <button className="border border-[#2d2740] w-full mt-4 rounded-lg bg-[#1a1625] hover:bg-[#201a2e] py-3 cursor-pointer text-[#c4b8e0] transition text-sm font-medium">
           Logout
