@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { type formDataInterface } from "../types/types";
 import { Link, useNavigate } from "react-router-dom";
 import { AlertContext } from "../context/alertContext";
@@ -11,8 +11,8 @@ import { isAxiosError } from "axios";
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const auth = React.useContext(AuthContext);
-  const { openAlert } = React.useContext(AlertContext);
+  const auth = useContext(AuthContext);
+  const { openAlert } = useContext(AlertContext);
   const navigate = useNavigate();
   const { getLocalStorage, removeLocalStorage } = useLocalStorage();
 
@@ -66,6 +66,9 @@ const SignIn = () => {
       const res = await axios.post("/auth/login", formData);
       setLoading(false);
       if (res.status === 200 && res.data.authenticated === true) {
+        // Store token in localStorage
+        localStorage.setItem("JwtToken", res.data.token);
+
         auth?.updateAuthenticated(true);
         auth?.updateUser(res.data.name, res.data.email);
         setError(false);

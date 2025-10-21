@@ -1,4 +1,4 @@
-import React from "react";
+import { createContext } from "react";
 
 interface AuthContextInterface {
   name?: string | null;
@@ -9,6 +9,11 @@ interface AuthContextInterface {
   logout: () => void;
 }
 
-export const AuthContext = React.createContext<AuthContextInterface | null>(
-  null
-);
+export const AuthContext = createContext<AuthContextInterface>({
+  name: null,
+  authenticated: false,
+  email: null,
+  updateUser: () => {},
+  updateAuthenticated: () => {},
+  logout: () => {},
+});

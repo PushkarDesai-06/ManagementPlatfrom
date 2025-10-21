@@ -4,7 +4,6 @@ import "dotenv/config";
 import connectDb from "./db.js";
 import { router as authRouter } from "./routes/auth.js";
 import { folderRouter } from "./routes/folders.js";
-import cookieParser from "cookie-parser";
 import { todoRouter } from "./routes/todo.js";
 import { pageRouter } from "./routes/pages.js";
 
@@ -13,7 +12,6 @@ const app = express();
 connectDb(process.env.DB_URL);
 
 app.use(express.json());
-app.use(cookieParser());
 app.use(
   cors({
     origin: [
@@ -27,8 +25,8 @@ app.use(
 app.use((req, res, next) => {
   // logging middleware
   console.log(`Request from : ${req.hostname}`);
-  console.log(`Request hostname: ${req.url}`);
-  console.log(req.headers.cookie);
+  console.log(`Request URL: ${req.url}`);
+  console.log(`Authorization header: ${req.headers.authorization}`);
   console.log("Request Body : ");
   console.log(req.body);
 

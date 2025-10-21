@@ -1,4 +1,4 @@
-import React from "react";
+import { createContext, type Ref } from "react";
 
 export type AlertContextType = {
   alert: {
@@ -7,11 +7,11 @@ export type AlertContextType = {
   };
   openAlert: (title: string, message: string) => void;
   closeAlert: () => void;
-  timeRef: React.Ref<number | null>;
+  timeRef: Ref<number | null>;
   showAlert: boolean;
 };
 
-export const AlertContext = React.createContext<AlertContextType>({
+export const AlertContext = createContext<AlertContextType>({
   alert: {
     title: "",
     message: "",

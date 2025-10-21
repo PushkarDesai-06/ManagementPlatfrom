@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/authcontext";
 import { Link, useNavigate } from "react-router-dom";
 import Beams from "../blocks/Backgrounds/Beams/Beams";
@@ -6,10 +6,10 @@ import axios from "../lib/axios";
 import { AlertContext } from "../context/alertContext";
 
 const SignUp = () => {
-  const auth = React.useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { openAlert } = React.useContext(AlertContext);
+  const { openAlert } = useContext(AlertContext);
 
   useEffect(() => {
     if (auth?.authenticated) navigate("/");
@@ -33,8 +33,12 @@ const SignUp = () => {
     try {
       const res = await axios.post("/auth/register", formData);
 
-      if (res.status == 200) {
+      if (res.status == 200 && res.data.token) {
+        // Store token in localStorage
+        localStorage.setItem("JwtToken", res.data.token);
+
         setLoading(false);
+        openAlert("Success", "Account created successfully! Please sign in.");
         navigate("/signin");
       } else {
         auth?.updateAuthenticated(false);

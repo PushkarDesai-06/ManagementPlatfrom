@@ -1,4 +1,4 @@
-import React from "react";
+import { createContext } from "react";
 
 export type FolderContextType = {
   activeFolderId: string;
@@ -7,7 +7,7 @@ export type FolderContextType = {
   changeFolders: (folders: { id: string; name: string }[]) => void;
 };
 
-export const FolderContext = React.createContext<FolderContextType>({
+export const FolderContext = createContext<FolderContextType>({
   activeFolderId: "",
   changeActiveFolder: () => {},
   folders: [],

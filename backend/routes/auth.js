@@ -22,20 +22,19 @@ router.post("/login", async (req, res) => {
 
   if (isMatch) {
     const payload = { name: user.name, email: user.email };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1hr" });
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "none",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+
     res.status(200).json({
+      status: 200,
       authenticated: true,
-      message: "User authenticated successfuly",
+      message: "User authenticated successfully",
       name: user.name,
       email: user.email,
+      token: token, // Send token in response body
     });
   } else {
     res.status(200).json({
+      status: 200,
       authenticated: false,
       message: "Wrong username or password",
     });
@@ -54,13 +53,15 @@ router.post("/register", async (req, res) => {
     const user = await userObj.save();
     console.log(user);
     const payload = { name: user.name, email: user.email };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1hr" });
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+
+    res.status(200).json({
+      status: 200,
+      message: "User Created",
+      token: token, // Send token in response body
+      name: user.name,
+      email: user.email,
     });
-    res.status(200).json({ message: "User Created" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: error });
@@ -70,14 +71,26 @@ router.post("/register", async (req, res) => {
 router.get("/get-info", authorizeJWT, (req, res) => {
   try {
     const { name, email } = req.headers.user;
-    res.json({ name, email });
+    res.status(200).json({
+      status: 200,
+      authenticated: true,
+      name,
+      email,
+    });
   } catch (error) {
     console.log(error);
-    res.status(401).json({ message: error });
+    res.status(401).json({
+      status: 401,
+      authenticated: false,
+      message: error.message,
+    });
   }
 });
 
-router.get("/logout", (req, res) => {
-  res.clearCookie();
-  res.json({ message: "Cleared Cookies" });
+router.post("/logout", (req, res) => {
+  // With localStorage, logout is handled on client side
+  res.status(200).json({
+    status: 200,
+    message: "Logout successful",
+  });
 });

@@ -3,19 +3,32 @@ import { User } from "../models/user.model.js";
 
 export const authorizeJWT = async (req, res, next) => {
   const JWT_SECRET = process.env.JWT_SECRET;
-  console.log(req.cookies);
-  if (!req.cookies.token) {
-    return res
-      .status(401)
-      .json({ message: "Unauthorized Access, provide JWT Token" });
+
+  // Get token from Authorization header
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      authenticated: false,
+      message: "Unauthorized Access, provide JWT Token",
+    });
   }
 
   try {
-    const jwtToken = req.cookies.token;
+    // Extract token from "Bearer <token>"
+    const jwtToken = authHeader.split(" ")[1];
+
     try {
       const payload = jwt.verify(jwtToken, JWT_SECRET);
       const data = await User.findOne({ email: payload.email });
-      if (!data) res.status(404).json({ message: "User Not found" });
+
+      if (!data) {
+        return res.status(404).json({
+          authenticated: false,
+          message: "User not found",
+        });
+      }
+
       req.headers.user = { name: data.name, email: data.email };
       next();
     } catch (error) {
@@ -23,17 +36,20 @@ export const authorizeJWT = async (req, res, next) => {
       if (error.name === "TokenExpiredError") {
         return res.status(401).json({
           authenticated: false,
-          message: "JTW Token expired",
+          message: "JWT Token expired",
         });
       }
 
       return res.status(401).json({
         authenticated: false,
-        message: "Server Error, Please try again later.",
+        message: "Invalid token",
       });
     }
   } catch (error) {
-    res.status(400).json({ message: error });
+    res.status(400).json({
+      authenticated: false,
+      message: error.message,
+    });
     console.log(error);
   }
 };
