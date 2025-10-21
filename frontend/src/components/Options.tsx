@@ -1,11 +1,10 @@
 import { motion } from "framer-motion";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { useDeleteTodoMutation } from "../queries/todoqueries";
-import type { OptionsProps, TodoProps } from "../types/types";
+import type { OptionsProps } from "../types/types";
 
 export const Options = ({ setIsEditable, todoId }: OptionsProps) => {
-  const { mutate: deleteMutate, isPending: isDeletePending } =
-    useDeleteTodoMutation();
+  const { mutate: deleteMutate } = useDeleteTodoMutation();
   const handleDelete = () => {
     deleteMutate(todoId);
   };

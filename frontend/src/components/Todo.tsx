@@ -12,7 +12,7 @@ const Todo = ({
   const [showOptions, setShowOptins] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [todoText, setTodoText] = useState<string>(text);
-  const handleOptionsClick = (e?: React.MouseEvent) => {
+  const handleOptionsClick = () => {
     setShowOptins((prev) => !prev);
   };
   const prevTodo = useRef<string>(text);
@@ -21,7 +21,7 @@ const Todo = ({
   useEffect(() => {
     //handle the saving of the todos
     // escape to go back, enter to save
-    const keyboardEventListener = (e: React.KeyboardEvent) => {
+    const keyboardEventListener = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setTodoText(prevTodo.current);
         setIsEditable(false);
@@ -119,7 +119,7 @@ const Todo = ({
         className="cursor-pointer transition hover:text-[#8b7fb8] text-[#5a4f73] ml-2"
         onClick={(e: React.MouseEvent) => {
           e.stopPropagation();
-          handleOptionsClick(e);
+          handleOptionsClick();
         }}
       >
         <HiDotsHorizontal size={18} />

@@ -9,7 +9,6 @@ const SignUp = () => {
   const auth = React.useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
   const { openAlert } = React.useContext(AlertContext);
 
   useEffect(() => {
@@ -29,18 +28,22 @@ const SignUp = () => {
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-      e.preventDefault();
       const res = await axios.post("/auth/register", formData);
 
       if (res.status == 200) {
+        setLoading(false);
         navigate("/signin");
       } else {
         auth?.updateAuthenticated(false);
+        setLoading(false);
         console.log("Error");
       }
     } catch (error) {
       auth?.updateAuthenticated(false);
+      setLoading(false);
       openAlert(
         "Server Error",
         `Could not connect to server. Please try again later ${error}`

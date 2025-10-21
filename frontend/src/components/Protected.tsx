@@ -12,7 +12,7 @@ const Protected = ({ children }: { children: React.ReactNode }) => {
   const { openAlert } = useContext(AlertContext);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const { getLocalStorage, removeLocalStorage } = useLocalStorage();
+  const { removeLocalStorage } = useLocalStorage();
 
   useEffect(() => {
     const verifyToken = async () => {

@@ -14,11 +14,10 @@ const SignIn = () => {
   const auth = React.useContext(AuthContext);
   const { openAlert } = React.useContext(AlertContext);
   const navigate = useNavigate();
-  const { setLocalStorage, getLocalStorage, removeLocalStorage } =
-    useLocalStorage();
+  const { getLocalStorage, removeLocalStorage } = useLocalStorage();
 
   useEffect(() => {
-    const verifyToken = async (JwtToken: string) => {
+    const verifyToken = async () => {
       try {
         const req = await axios.get(`/auth/get-info`);
         if (req.data.authenticated) {
@@ -47,8 +46,11 @@ const SignIn = () => {
     };
 
     if (auth?.authenticated) navigate("/");
-    else if (getLocalStorage("JwtToken")) {
-      verifyToken(getLocalStorage("JwtToken"));
+    else {
+      const token = getLocalStorage("JwtToken");
+      if (token) {
+        verifyToken();
+      }
     }
   }, []);
 
@@ -86,7 +88,7 @@ const SignIn = () => {
 
   return (
     <>
-      <div className="flex gap-4 w-screen min-h-screen bg-[#0a070f]">
+      <div className="flex flex-col lg:flex-row gap-4 w-screen min-h-screen bg-[#0a070f]">
         <div className="absolute w-screen h-screen z-0 opacity-30">
           <Beams
             beamWidth={3}
@@ -100,16 +102,27 @@ const SignIn = () => {
           />
         </div>
 
-        <div className="flex items-center justify-end flex-1/2 z-10">
+        {/* Left side branding - hidden on mobile */}
+        <div className="hidden lg:flex items-center justify-end flex-1 z-10">
           <h1 className="text-4xl text-center p-6 px-10 rounded-lg bg-[#1a1625] border border-[#2d2740] w-72">
             <p className="font-poppins text-[#e8e3f5] font-semibold">Manage</p>
             <p className="text-[#8b7fb8] text-2xl">Your Life</p>
           </h1>
         </div>
-        <div className="right flex-1/2 flex items-center z-10">
+
+        {/* Mobile branding - top of page */}
+        <div className="lg:hidden flex justify-center pt-8 pb-4 z-10">
+          <h1 className="text-3xl text-center p-4 px-8 rounded-lg bg-[#1a1625] border border-[#2d2740]">
+            <p className="font-poppins text-[#e8e3f5] font-semibold">Manage</p>
+            <p className="text-[#8b7fb8] text-xl">Your Life</p>
+          </h1>
+        </div>
+
+        {/* Right side form */}
+        <div className="flex-1 flex items-center justify-center z-10 px-4 pb-8 lg:pb-0">
           <form
             onSubmit={handleSubmit}
-            className="p-8 m-4 flex flex-col gap-3 rounded-lg sm:w-sm md:w-lg bg-[#1a1625] border border-[#2d2740]"
+            className="p-6 sm:p-8 w-full max-w-md flex flex-col gap-3 rounded-lg bg-[#1a1625] border border-[#2d2740]"
           >
             <div className="mb-4">
               <h2 className="text-2xl font-semibold text-[#e8e3f5] mb-1">
