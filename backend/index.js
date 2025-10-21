@@ -19,7 +19,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://semi-notion-ewsvvkmhf-pushkardesai-06s-projects.vercel.app/",
+      "https://semi-notion.vercel.app/",
     ],
     credentials: true,
   })
