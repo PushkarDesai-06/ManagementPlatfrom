@@ -35,11 +35,23 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/", (req, res) => {
+  res.json({
+    message: "Welcome to my express server!!",
+  });
+});
+
 app.use("/auth", authRouter); // handle all auth
 app.use("/folder", folderRouter); //Handle all requests related to folders
 app.use("/todo", todoRouter); // Handles all requests related to todos
 app.use("/page", pageRouter); // Handles all requests related to pages (NEW)
 
-app.listen(8000, () => {
-  console.log("SERVER STARTED");
-});
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  app.listen(8000, () => {
+    console.log("SERVER STARTED on port 8000");
+  });
+}
+
+// Export for Vercel serverless
+export default app;
