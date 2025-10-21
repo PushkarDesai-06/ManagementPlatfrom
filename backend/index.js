@@ -24,6 +24,14 @@ app.use(
     credentials: true,
   })
 );
+app.use((req, res, next) => {
+  // logging middleware
+  console.log(`Request from : ${req.url}`);
+  console.log(`Request hostname: ${req.hostname}`);
+  console.log(req.body)
+
+  next();
+});
 
 app.use("/auth", authRouter); // handle all auth
 app.use("/folder", folderRouter); //Handle all requests related to folders
