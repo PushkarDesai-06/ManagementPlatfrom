@@ -8,7 +8,7 @@ const Account = () => {
   return (
     <div className="flex flex-col bg-[#0a070f] min-h-screen">
       <div className="w-full">{<Navbar activeHref="/account" />}</div>
-      <div className="max-w-2xl mx-auto p-8">
+      <div className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8 w-full">
         <ProfileCard
           handleEditClick={handleEditClick}
           name="Joe Mama"
