@@ -28,7 +28,7 @@ app.use((req, res, next) => {
   // logging middleware
   console.log(`Request from : ${req.hostname}`);
   console.log(`Request hostname: ${req.url}`);
-  console.log(`Request headers: ${req.headers}`);
+  console.log(req.headers.cookie);
   console.log("Request Body : ");
   console.log(req.body);
 
