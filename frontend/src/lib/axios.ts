@@ -1,5 +1,10 @@
 import Axios from "axios";
 
-const axios = Axios.create({ baseURL: "http://localhost:8000/" , withCredentials :true });
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+const axios = Axios.create({
+  baseURL: backendURL,
+  withCredentials: true,
+});
 
 export default axios;
