@@ -26,9 +26,11 @@ app.use(
 );
 app.use((req, res, next) => {
   // logging middleware
-  console.log(`Request from : ${req.url}`);
-  console.log(`Request hostname: ${req.hostname}`);
-  console.log(req.body)
+  console.log(`Request from : ${req.hostname}`);
+  console.log(`Request hostname: ${req.url}`);
+  console.log(`Request headers: ${req.headers}`);
+  console.log("Request Body : ");
+  console.log(req.body);
 
   next();
 });
