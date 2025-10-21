@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
-import { useAddTodoMutation, useGetTodoQuery } from "../queries/todoqueries";
+import { useAddTodoMutation } from "../queries/todoqueries";
 
 export const FloatingInput = () => {
   const [newTodoValue, setNewTodoValue] = useState("");

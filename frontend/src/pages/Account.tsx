@@ -1,15 +1,9 @@
 import React, { useContext } from "react";
 import Navbar from "../components/Navbar";
 import ProfileCard from "../components/ProfileCard";
-import { AuthContext } from "../context/authcontext";
-import useLocalStorage from "../hooks/useLocalStorage";
-import { useNavigate } from "react-router-dom";
-import axios from "../lib/axios";
 
 const Account = () => {
-  const auth = useContext(AuthContext);
-  const navigate = useNavigate();
-  const handleEditClick = (e: React.MouseEvent) => {};
+  const handleEditClick = () => {};
 
   return (
     <div className="flex flex-col bg-[#0a070f] min-h-screen">

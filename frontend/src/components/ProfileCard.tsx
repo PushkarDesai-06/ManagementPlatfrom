@@ -1,4 +1,3 @@
-import React from "react";
 import { MapPin, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ProfileCardProps } from "../types/types";

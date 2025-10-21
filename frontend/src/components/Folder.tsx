@@ -1,5 +1,5 @@
 import { MdEdit, MdEditOff } from "react-icons/md";
-import React, { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useEditFolderNameMutation } from "../queries/folderqueries";
 import { FolderContext } from "../context/folderContext";

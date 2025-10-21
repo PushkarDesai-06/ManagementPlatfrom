@@ -23,7 +23,7 @@ app.use(
 
 app.use("/auth", authRouter); // handle all auth
 app.use("/folder", folderRouter); //Handle all requests related to folders
-app.use("/todo", todoRouter); // Handles all requests related to todos (LEGACY)
+app.use("/todo", todoRouter); // Handles all requests related to todos
 app.use("/page", pageRouter); // Handles all requests related to pages (NEW)
 
 app.listen(8000, () => {

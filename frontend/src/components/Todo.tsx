@@ -12,7 +12,7 @@ const Todo = ({
   const [showOptions, setShowOptins] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [todoText, setTodoText] = useState<string>(text);
-  const handleOptionsClick = (e?: React.MouseEvent) => {
+  const handleOptionsClick = () => {
     setShowOptins((prev) => !prev);
   };
   const prevTodo = useRef<string>(text);
@@ -119,7 +119,7 @@ const Todo = ({
         className="cursor-pointer transition hover:text-[#8b7fb8] text-[#5a4f73] ml-2"
         onClick={(e: React.MouseEvent) => {
           e.stopPropagation();
-          handleOptionsClick(e);
+          handleOptionsClick();
         }}
       >
         <HiDotsHorizontal size={18} />
