@@ -3,6 +3,7 @@ import { User } from "../models/user.model.js";
 
 export const authorizeJWT = async (req, res, next) => {
   const JWT_SECRET = process.env.JWT_SECRET;
+  console.log(req.cookies);
   if (!req.cookies.token) {
     return res
       .status(401)
