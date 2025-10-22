@@ -31,6 +31,14 @@ const Home = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showAddFolderPopup, setShowAddFolderPopup] = useState(false);
 
+  // Right sidebar resize state
+  const MIN_RIGHT_SIDEBAR_WIDTH = 384; // 96 * 4 (w-96)
+  const [rightSidebarWidth, setRightSidebarWidth] = useState(() => {
+    const saved = localStorage.getItem("rightSidebarWidth");
+    return saved ? parseInt(saved) : MIN_RIGHT_SIDEBAR_WIDTH;
+  });
+  const [isResizing, setIsResizing] = useState(false);
+
   // Detect mobile/tablet screen size
   useEffect(() => {
     const checkMobile = () => {
@@ -52,6 +60,64 @@ const Home = () => {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Load collapsed state from localStorage
+  useEffect(() => {
+    const savedLeftState = localStorage.getItem("isLeftSidebarOpen");
+    const savedRightState = localStorage.getItem("isRightSidebarOpen");
+
+    if (!isMobile) {
+      if (savedLeftState !== null) {
+        setIsLeftSidebarOpen(savedLeftState === "true");
+      }
+      if (savedRightState !== null) {
+        setIsRightSidebarOpen(savedRightState === "true");
+      }
+    }
+  }, [isMobile]);
+
+  // Save collapsed state to localStorage
+  useEffect(() => {
+    if (!isMobile) {
+      localStorage.setItem("isLeftSidebarOpen", String(isLeftSidebarOpen));
+      localStorage.setItem("isRightSidebarOpen", String(isRightSidebarOpen));
+    }
+  }, [isLeftSidebarOpen, isRightSidebarOpen, isMobile]);
+
+  // Handle resize
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+
+      const newWidth = window.innerWidth - e.clientX;
+      if (newWidth >= MIN_RIGHT_SIDEBAR_WIDTH && newWidth <= 800) {
+        setRightSidebarWidth(newWidth);
+        localStorage.setItem("rightSidebarWidth", String(newWidth));
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+
+    if (isResizing) {
+      document.body.style.cursor = "ew-resize";
+      document.body.style.userSelect = "none";
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizing]);
+
+  const handleResizeStart = () => {
+    setIsResizing(true);
+  };
 
   const handleDeleteClick = () => {
     if (!folderData || folderData.length === 0) return;
@@ -143,7 +209,7 @@ const Home = () => {
             opacity: { duration: 0.15 },
           }}
           className={`
-          border-r border-[#1f1a2e] bg-[#0f0d14] flex-shrink-0 relative overflow-hidden
+          border-r border-[#1f1a2e] bg-[#0f0d14] shrink-0 relative overflow-hidden
           ${
             isMobile && isLeftSidebarOpen
               ? "fixed inset-y-0 left-0 z-40 max-w-sm"
@@ -172,7 +238,7 @@ const Home = () => {
             initial={{ y: -20, opacity: 0 }}
             transition={{ delay: 0.3 }}
             animate={{ y: 0, opacity: 1 }}
-            className="flex justify-between items-center p-4 sm:p-6 lg:p-8 pb-4 border-b border-[#1f1a2e] flex-shrink-0"
+            className="flex justify-between items-center p-4 sm:p-6 lg:p-8 pb-4 border-b border-[#1f1a2e] shrink-0"
           >
             <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
               {/* Left Sidebar Toggle */}
@@ -180,7 +246,7 @@ const Home = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsLeftSidebarOpen(!isLeftSidebarOpen)}
-                className="p-2 rounded-lg bg-[#1a1625] border border-[#2d2740] hover:bg-[#201a2e] text-[#c4b8e0] transition-all duration-200 shadow-lg hover:shadow-purple-900/20 flex-shrink-0"
+                className="p-2 rounded-lg bg-[#1a1625] border border-[#2d2740] hover:bg-[#201a2e] text-[#c4b8e0] transition-all duration-200 shadow-lg hover:shadow-purple-900/20 shrink-0"
                 aria-label={isLeftSidebarOpen ? "Hide sidebar" : "Show sidebar"}
               >
                 {isLeftSidebarOpen ? (
@@ -247,7 +313,11 @@ const Home = () => {
         <motion.div
           initial={false}
           animate={{
-            width: isRightSidebarOpen ? (isMobile ? "100%" : 384) : 0,
+            width: isRightSidebarOpen
+              ? isMobile
+                ? "100%"
+                : rightSidebarWidth
+              : 0,
             opacity: isRightSidebarOpen ? 1 : 0,
           }}
           transition={{
@@ -256,8 +326,12 @@ const Home = () => {
             damping: 30,
             opacity: { duration: 0.15 },
           }}
+          style={{
+            width:
+              !isMobile && isRightSidebarOpen ? rightSidebarWidth : undefined,
+          }}
           className={`
-          border-l border-[#1f1a2e] bg-[#0f0d14] flex-shrink-0 overflow-hidden
+          border-l border-[#1f1a2e] bg-[#0f0d14] shrink-0 overflow-hidden relative
           ${
             isMobile && isRightSidebarOpen
               ? "fixed inset-y-0 right-0 z-40 max-w-sm"
@@ -265,13 +339,27 @@ const Home = () => {
           }
         `}
         >
+          {/* Resize Handle */}
+          {!isMobile && isRightSidebarOpen && (
+            <div
+              onMouseDown={handleResizeStart}
+              className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-[#7c6ba8]/50 active:bg-[#7c6ba8] transition-colors z-50 group"
+            >
+              <div className="absolute left-0 top-0 bottom-0 w-3 -translate-x-1" />
+            </div>
+          )}
+
           <div
+            style={{
+              width:
+                !isMobile && isRightSidebarOpen ? rightSidebarWidth : undefined,
+            }}
             className={`${
-              isMobile ? "w-full" : "w-96"
+              isMobile ? "w-full" : ""
             } h-full flex flex-col relative`}
           >
             {/* Todos Header */}
-            <div className="flex-shrink-0 p-4 sm:p-6 pb-4 border-b border-[#1f1a2e]">
+            <div className="shrink-0 p-4 sm:p-6 pb-4 border-b border-[#1f1a2e]">
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-lg sm:text-xl font-semibold text-[#e8e3f5]">
                   Quick Tasks
@@ -297,7 +385,7 @@ const Home = () => {
             </div>
 
             {/* Fixed Input at Bottom */}
-            <div className="flex-shrink-0 px-4 sm:px-6 pb-4 sm:pb-6 pt-4 border-t border-[#1f1a2e]">
+            <div className="shrink-0 px-4 sm:px-6 pb-4 sm:pb-6 pt-4 border-t border-[#1f1a2e]">
               <FloatingInput />
             </div>
           </div>

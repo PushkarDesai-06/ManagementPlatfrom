@@ -10,12 +10,12 @@ const todoSchema = mongoose.Schema(
         content: { type: String, required: true },
         status: { type: String, required: true },
         createdAt: { type: Date, required: true },
+        completed: { type: Boolean, default: false },
+        order: { type: Number, default: 0 },
       },
     ],
   },
-  { collection: "Todo" ,
-    timestamps : true
-  }
+  { collection: "Todo", timestamps: true }
 );
 
 const todoModel = mongoose.model("todoModel", todoSchema);

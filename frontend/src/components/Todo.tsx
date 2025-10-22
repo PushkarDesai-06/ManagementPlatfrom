@@ -1,20 +1,52 @@
 import { useEffect, useRef, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
+import { GripVertical } from "lucide-react";
 import { motion } from "framer-motion";
 import type { TodoProps } from "../types/types";
 import { Options } from "./Options";
+import { useUpdateTodoMutation } from "../queries/todoqueries";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 const Todo = ({
   text = "Lorem ipsum dolor sit, amet consectetur",
   todoId,
   date,
+  completed = false,
 }: TodoProps) => {
   const [showOptions, setShowOptins] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [todoText, setTodoText] = useState<string>(text);
+  const [isCompleted, setIsCompleted] = useState<boolean>(completed);
+  const { mutate: updateTodo } = useUpdateTodoMutation();
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: todoId });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
   const handleOptionsClick = () => {
     setShowOptins((prev) => !prev);
   };
+
+  const handleCheckboxChange = () => {
+    const newCompletedState = !isCompleted;
+    setIsCompleted(newCompletedState);
+    updateTodo({
+      todoId,
+      updates: { completed: newCompletedState },
+    });
+  };
+
   const prevTodo = useRef<string>(text);
   const todoRef = useRef<null | HTMLInputElement>(null);
 
@@ -82,6 +114,8 @@ const Todo = ({
 
   return (
     <motion.div
+      ref={setNodeRef}
+      style={style}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -93,6 +127,25 @@ const Todo = ({
             } border transition-all duration-200
         `}
     >
+      {/* Drag Handle */}
+      <button
+        {...attributes}
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing mr-2 text-[#5a4f73] hover:text-[#8b7fb8] transition-colors touch-none"
+        aria-label="Drag to reorder"
+      >
+        <GripVertical size={18} />
+      </button>
+
+      {/* Checkbox */}
+      <input
+        type="checkbox"
+        checked={isCompleted}
+        onChange={handleCheckboxChange}
+        className="w-5 h-5 rounded border-2 border-[#5a4f73] bg-[#13111c] checked:bg-[#6b4fd8] checked:border-[#6b4fd8] cursor-pointer mr-3 accent-[#6b4fd8] transition-all"
+        aria-label="Mark as complete"
+      />
+
       <div className="flex flex-col mr-4 min-w-[80px]">
         <div className="text-[11px] font-medium text-[#8b7fb8] uppercase tracking-wide">
           {displayDate}
@@ -108,6 +161,7 @@ const Todo = ({
           disabled={!isEditable}
           className={`flex items-center w-full outline-0 cursor-default bg-transparent text-[15px]
             ${isEditable ? "text-[#e8e3f5]" : "text-[#c4b8e0]"}
+            ${isCompleted ? "line-through opacity-50" : ""}
             `}
           value={todoText}
           onChange={(e) => setTodoText(e.target.value)}

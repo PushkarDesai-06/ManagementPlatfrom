@@ -30,3 +30,30 @@ export const deleteTodo = async (folderId: string, todoId: string) => {
     throw new Error(`Error : ${error}`);
   }
 };
+
+export const updateTodo = async (
+  folderId: string,
+  todoId: string,
+  updates: { content?: string; completed?: boolean; order?: number }
+) => {
+  try {
+    const response = await axios.put(`/todo/${folderId}/${todoId}`, updates);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error : ${error}`);
+  }
+};
+
+export const reorderTodos = async (
+  folderId: string,
+  todos: { todoId: string; order: number }[]
+) => {
+  try {
+    const response = await axios.put(`/todo/${folderId}/reorder/batch`, {
+      todos,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error : ${error}`);
+  }
+};

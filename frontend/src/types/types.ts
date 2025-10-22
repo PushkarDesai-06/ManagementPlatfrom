@@ -21,6 +21,8 @@ export type TodoProps = {
   text: string;
   todoId: string;
   date: Date;
+  completed?: boolean;
+  order?: number;
 };
 
 export type OptionsProps = {
