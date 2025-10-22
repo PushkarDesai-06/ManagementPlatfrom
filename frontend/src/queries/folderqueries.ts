@@ -18,6 +18,17 @@ export const useAddFolderMutation = () => {
   const queryClient = useQueryClient();
   const { isPending, mutate } = useMutation({
     mutationFn: addFolder,
+    onMutate: async (newFolder: String) => {
+      await queryClient.cancelQueries({ queryKey: ["folders"] });
+
+      const previousFolders = queryClient.getQueriesData({
+        queryKey: ["folders"],
+      });
+
+      // queryClient.setQueriesData(["folders"], (old) => {
+      //   old.map((folder) => (folder.));
+      // });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["folders"] });
     },

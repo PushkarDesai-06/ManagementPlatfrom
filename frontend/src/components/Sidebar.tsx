@@ -5,15 +5,16 @@ import { AuthContext } from "../context/authcontext";
 import { FolderContext } from "../context/folderContext";
 import { LoaderIcon } from "lucide-react";
 import { IoAdd } from "react-icons/io5";
-import {
-  useAddFolderMutation,
-  useGetFoldersQuery,
-} from "../queries/folderqueries";
+import { useGetFoldersQuery } from "../queries/folderqueries";
 import { useNavigate } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 20;
 
-const Sidebar = () => {
+interface SidebarProps {
+  onAddFolderClick: () => void;
+}
+
+const Sidebar = ({ onAddFolderClick }: SidebarProps) => {
   const [openIdx, setOpenIdx] = useState<number>(-1);
   const [activeFolder, setActiveFolder] = useState<number>(0);
   const [folders, setFolders] = useState<{ id: string; name: string }[]>([]);
@@ -23,7 +24,6 @@ const Sidebar = () => {
   const { changeActiveFolder, activeFolderId } = useContext(FolderContext);
   const navigate = useNavigate();
   const { data, isPending } = useGetFoldersQuery();
-  const { mutate } = useAddFolderMutation();
 
   useEffect(() => {
     if (data) {
@@ -68,10 +68,6 @@ const Sidebar = () => {
     return () => container.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  const handleAddFolder = () => {
-    mutate("NewFolder");
-  };
-
   const handleLogout = () => {
     auth?.logout();
     navigate("/signin");
@@ -100,7 +96,7 @@ const Sidebar = () => {
 
         {/* Add Folder */}
         <button
-          onClick={handleAddFolder}
+          onClick={onAddFolderClick}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#7c6ba8] hover:bg-[#8b7fb8] !disabled:bg-[#584c76] text-white transition font-medium text-sm"
           disabled={isPending}
         >
