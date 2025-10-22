@@ -22,13 +22,49 @@ export const useAddTodoMutation = () => {
   const { openAlert } = React.useContext(AlertContext);
   const { mutate, isPending } = useMutation({
     mutationFn: (content: string) => addTodo(activeFolderId, content),
+    onMutate: async (content) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["todos", activeFolderId] });
+
+      // Snapshot previous value
+      const previousTodos = queryClient.getQueryData(["todos", activeFolderId]);
+
+      // Optimistically add new todo
+      queryClient.setQueryData(["todos", activeFolderId], (old: any) => {
+        const newTodo = {
+          todoId: `temp-${Date.now()}`,
+          content,
+          completed: false,
+          folderId: activeFolderId,
+          createdAt: new Date().toISOString(),
+          status: "pending",
+        };
+
+        // Handle the API response structure {todos: [...]}
+        if (old?.todos) {
+          return {
+            ...old,
+            todos: [...old.todos, newTodo],
+          };
+        }
+
+        return { todos: [newTodo] };
+      });
+
+      return { previousTodos };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos", activeFolderId] });
     },
-    onError: () => {
+    onError: (_err, _content, context) => {
+      // Rollback on error
+      queryClient.setQueryData(
+        ["todos", activeFolderId],
+        context?.previousTodos
+      );
       openAlert(
         "Error adding todo",
-        "There is a server error, Plase try again later"
+        "There is a server error, Please try again later"
       );
     },
   });
@@ -42,13 +78,42 @@ export const useDeleteTodoMutation = () => {
   const { openAlert } = React.useContext(AlertContext);
   const { mutate, isPending } = useMutation({
     mutationFn: (todoId: string) => deleteTodo(activeFolderId, todoId),
+    onMutate: async (todoId) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["todos", activeFolderId] });
+
+      // Snapshot previous value
+      const previousTodos = queryClient.getQueryData(["todos", activeFolderId]);
+
+      // Optimistically remove todo
+      queryClient.setQueryData(["todos", activeFolderId], (old: any) => {
+        if (!old) return old;
+
+        // Handle the API response structure {todos: [...]}
+        if (old?.todos) {
+          return {
+            ...old,
+            todos: old.todos.filter((todo: any) => todo.todoId !== todoId),
+          };
+        }
+
+        return old;
+      });
+
+      return { previousTodos };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos", activeFolderId] });
     },
-    onError: () => {
+    onError: (_err, _todoId, context) => {
+      // Rollback on error
+      queryClient.setQueryData(
+        ["todos", activeFolderId],
+        context?.previousTodos
+      );
       openAlert(
         "Error deleting todo",
-        "There is a server error, Plase try again later"
+        "There is a server error, Please try again later"
       );
     },
   });

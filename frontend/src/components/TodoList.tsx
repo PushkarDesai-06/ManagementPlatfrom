@@ -10,11 +10,7 @@ const TodoList = () => {
     status: string;
   };
 
-  const {
-    data: todosData,
-    isPending: isGetTodoPending,
-    isFetching,
-  } = useGetTodoQuery();
+  const { data: todosData, isPending: isGetTodoPending } = useGetTodoQuery();
 
   const todos = todosData?.todos || [];
 
@@ -46,11 +42,11 @@ const TodoList = () => {
           </div>
         </div>
       )}
-      {isFetching && (
+      {/* {isFetching && (
         <div className="my-4 flex justify-center">
           <Loader className="animate-spin text-[#7c6ba8]" size={20} />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
