@@ -60,7 +60,17 @@ export const TiptapEditor = ({
     autofocus: autoFocus,
     editorProps: {
       attributes: {
-        class: "min-h-[500px] outline-none text-[#e8e3f5] px-4",
+        class:
+          "min-h-[500px] outline-none text-[#e8e3f5] px-4 touch-manipulation",
+        // Prevent zoom on double-tap on iOS
+        style:
+          "touch-action: manipulation; -webkit-user-select: text; user-select: text;",
+      },
+      handleDOMEvents: {
+        // Ensure touch events work properly on mobile
+        touchstart: () => false,
+        touchend: () => false,
+        touchmove: () => false,
       },
     },
   });
@@ -78,10 +88,10 @@ export const TiptapEditor = ({
       editor &&
       content &&
       !isUpdatingRef.current &&
-      !editor.isFocused &&
       JSON.stringify(editor.getJSON()) !== JSON.stringify(content)
     ) {
-      editor.commands.setContent(content);
+      // Use emitUpdate: false to avoid triggering onUpdate during sync
+      editor.commands.setContent(content, { emitUpdate: false });
     }
   }, [content, editor]);
 

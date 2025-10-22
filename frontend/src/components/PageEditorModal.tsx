@@ -63,6 +63,7 @@ export const PageEditorModal = ({
     if (
       debouncedContent &&
       page &&
+      contentInitializedRef.current &&
       JSON.stringify(debouncedContent) !==
         JSON.stringify(page.blocks[0]?.content)
     ) {
@@ -82,6 +83,9 @@ export const PageEditorModal = ({
       updateBlocks(blocks, {
         onSuccess: () => {
           setLastSaved(new Date());
+        },
+        onError: (error) => {
+          console.error("Failed to save content:", error);
         },
       });
     }
@@ -133,7 +137,7 @@ export const PageEditorModal = ({
         className={`absolute bg-[#13111c] border border-[#2d2740] shadow-2xl transition-all duration-300 ${
           isFullscreen
             ? "inset-0"
-            : "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vh] rounded-xl"
+            : "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-5xl h-[90vh] rounded-xl max-sm:w-full max-sm:h-full max-sm:rounded-none"
         }`}
       >
         <div className="flex flex-col h-full">
@@ -196,7 +200,7 @@ export const PageEditorModal = ({
               </div>
 
               {/* Editor Content */}
-              <div className="flex-1 overflow-y-auto px-16 py-6">
+              <div className="flex-1 overflow-y-auto px-16 py-6 max-sm:px-4 max-sm:py-4">
                 <TiptapEditor
                   content={content}
                   onChange={handleChange}
