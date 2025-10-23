@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Plus, X } from "lucide-react";
 import TodoList from "./TodoList";
 import { FloatingInput } from "./FloatingInput";
-import { IoAddCircle } from "react-icons/io5";
 import type { Dispatch, SetStateAction } from "react";
 
 interface RightSidebarContainerProps {
