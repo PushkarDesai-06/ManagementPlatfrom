@@ -19,6 +19,8 @@ export const useSidebarState = (): UseSidebarStateReturn => {
       const mobile = window.innerWidth < 1024; // lg breakpoint
       setIsMobile(mobile);
 
+      setIsLeftSidebarOpen(false);
+
       // Auto-collapse sidebars on mobile
       if (mobile) {
         setIsLeftSidebarOpen(false);
@@ -55,6 +57,9 @@ export const useSidebarState = (): UseSidebarStateReturn => {
     if (!isMobile) {
       localStorage.setItem("isLeftSidebarOpen", String(isLeftSidebarOpen));
       localStorage.setItem("isRightSidebarOpen", String(isRightSidebarOpen));
+    } else { //defaults false in localstorage when in obile view.
+      localStorage.setItem("isLeftSidebarOpen", String(false));
+      localStorage.setItem("isRightSidebarOpen", String(false));
     }
   }, [isLeftSidebarOpen, isRightSidebarOpen, isMobile]);
 
