@@ -59,7 +59,7 @@ export const PageList = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden">
+    <div className="flex-1 flex flex-col h-screen overflow-hidden min-w-[400px]">
       {/* Header */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
@@ -85,13 +85,13 @@ export const PageList = () => {
       </motion.div>
 
       {/* Page List */}
-      <div className="flex-1 overflow-y-auto px-8 py-4">
+      <div className="flex-1 overflow-y-auto px-8 py-4 @container">
         {isPending ? (
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         ) : pages && pages.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 @md:grid-cols-2 @2xl:grid-cols-3 gap-4">
             {pages.map((page: PageListItem, index: number) => (
               <motion.div
                 key={page.pageId}
