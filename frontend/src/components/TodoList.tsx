@@ -35,17 +35,20 @@ const TodoList = () => {
   const { mutate: reorderTodos } = useReorderTodosMutation();
   const [localTodos, setLocalTodos] = useState<todoType[]>([]);
 
-  const todos = todosData?.todos || [];
-
   // Initialize and sort todos by order
   useEffect(() => {
+    const todos = todosData?.todos || [];
+
     if (todos.length > 0) {
       const sortedTodos = [...todos].sort(
         (a, b) => (a.order || 0) - (b.order || 0)
       );
       setLocalTodos(sortedTodos);
+    } else {
+      // Clear localTodos when there are no todos (e.g., switching to empty folder)
+      setLocalTodos([]);
     }
-  }, [todos]);
+  }, [todosData]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

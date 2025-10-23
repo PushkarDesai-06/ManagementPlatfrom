@@ -11,11 +11,13 @@ import RightSidebarContainer from "../components/RightSidebarContainer";
 import { useSidebarState } from "../hooks/useSidebarState";
 import { useSidebarResize } from "../hooks/useSidebarResize";
 import { useFolderActions } from "../hooks/useFolderActions";
+import AddTaskMobilePopup from "../components/AddTaskMobilePopup";
 
 const Home = () => {
   const { data: folderData } = useGetFoldersQuery();
   const { activeFolderId } = useContext(FolderContext);
   const [showAddFolderPopup, setShowAddFolderPopup] = useState(false);
+  const [showAddTaskPopup, setShowAddTaskPopup] = useState(false);
 
   // Custom hooks for sidebar state and resize
   const MIN_RIGHT_SIDEBAR_WIDTH = 384;
@@ -46,6 +48,12 @@ const Home = () => {
       {showAddFolderPopup &&
         createPortal(
           <AddFolderPopup onClose={() => setShowAddFolderPopup(false)} />,
+          document.getElementById("popup-root")!
+        )}
+      {showAddTaskPopup &&
+        isMobile &&
+        createPortal(
+          <AddTaskMobilePopup onClose={() => setShowAddTaskPopup(false)} />,
           document.getElementById("popup-root")!
         )}
       <div className="flex bg-[#0a070f] h-screen overflow-hidden relative">
@@ -98,6 +106,8 @@ const Home = () => {
           width={rightSidebarWidth}
           onClose={() => setIsRightSidebarOpen(false)}
           onResizeStart={handleResizeStart}
+          showTaskPopup={showAddTaskPopup}
+          setShowTaskPopup={setShowAddTaskPopup}
         />
       </div>
     </>

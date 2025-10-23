@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import TodoList from "./TodoList";
 import { FloatingInput } from "./FloatingInput";
+import { IoAddCircle } from "react-icons/io5";
+import type { Dispatch, SetStateAction } from "react";
 
 interface RightSidebarContainerProps {
   isOpen: boolean;
   isMobile: boolean;
   width: number;
+  showTaskPopup: boolean;
+  setShowTaskPopup: Dispatch<SetStateAction<boolean>>;
   onClose: () => void;
   onResizeStart: () => void;
 }
@@ -17,6 +21,8 @@ const RightSidebarContainer = ({
   width,
   onClose,
   onResizeStart,
+  showTaskPopup,
+  setShowTaskPopup,
 }: RightSidebarContainerProps) => {
   return (
     <motion.div
@@ -83,7 +89,20 @@ const RightSidebarContainer = ({
 
         {/* Fixed Input at Bottom */}
         <div className="shrink-0 px-4 sm:px-6 pb-4 sm:pb-6 pt-4 border-t border-[#1f1a2e]">
-          <FloatingInput />
+          {!isMobile && <FloatingInput />}
+          {isMobile && (
+            <button
+              disabled={showTaskPopup}
+              onClick={() => {
+                setShowTaskPopup(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed w-full"
+            >
+              {" "}
+              <span className="flex-1">New Task</span>
+              <Plus size={18} />
+            </button>
+          )}
         </div>
       </div>
     </motion.div>
