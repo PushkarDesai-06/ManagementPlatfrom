@@ -56,7 +56,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex gap-4 w-screen min-h-screen bg-[#0a070f]">
+    <div className="flex flex-col lg:flex-row gap-4 w-screen min-h-screen bg-[#0a070f] overflow-hidden">
       <div className="absolute w-screen h-screen z-0 opacity-30">
         <Beams
           beamWidth={3}
@@ -70,16 +70,19 @@ const SignUp = () => {
         />
       </div>
 
-      <div className="flex items-center justify-end flex-1/2 z-10">
-        <h1 className="text-4xl text-center p-6 px-10 rounded-lg bg-[#1a1625] border border-[#2d2740] w-72">
+      {/* Title Section */}
+      <div className="flex items-center justify-center lg:justify-end lg:flex-1 z-10 pt-8 lg:pt-0">
+        <h1 className="text-3xl sm:text-4xl text-center p-6 px-8 sm:px-10 rounded-lg bg-[#1a1625] border border-[#2d2740] w-full max-w-xs mx-4 lg:mx-0 lg:w-72">
           <p className="font-poppins text-[#e8e3f5] font-semibold">Manage</p>
-          <p className="text-[#8b7fb8] text-2xl">Your Life</p>
+          <p className="text-[#8b7fb8] text-xl sm:text-2xl">Your Life</p>
         </h1>
       </div>
-      <div className="right flex-1/2 flex items-center z-10">
+
+      {/* Form Section */}
+      <div className="flex items-center justify-center lg:flex-1 z-10 pb-8 lg:pb-0 px-4">
         <form
           onSubmit={handleSubmit}
-          className="p-8 m-4 flex flex-col gap-3 rounded-lg sm:w-sm md:w-lg bg-[#1a1625] border border-[#2d2740]"
+          className="p-6 sm:p-8 w-full max-w-md flex flex-col gap-3 rounded-lg bg-[#1a1625] border border-[#2d2740]"
         >
           <div className="mb-4">
             <h2 className="text-2xl font-semibold text-[#e8e3f5] mb-1">

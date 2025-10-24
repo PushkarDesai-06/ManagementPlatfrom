@@ -33,6 +33,23 @@ export const PageEditorModal = ({
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [editor, setEditor] = useState<Editor | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile on mount
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      // Auto-fullscreen on mobile
+      if (mobile) {
+        setIsFullscreen(true);
+      }
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Track if content has been initialized to prevent overwriting user input
   const contentInitializedRef = useRef(false);
@@ -135,22 +152,24 @@ export const PageEditorModal = ({
       {/* Modal */}
       <div
         className={`absolute bg-[#13111c] border border-[#2d2740] shadow-2xl transition-all duration-300 ${
-          isFullscreen
+          isFullscreen || isMobile
             ? "inset-0"
-            : "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-5xl h-[90vh] rounded-xl max-sm:w-full max-sm:h-full max-sm:rounded-none"
+            : "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-5xl h-[90vh] rounded-xl"
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex-shrink-0 bg-[#1a1625] border-b border-[#2d2740] px-6 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">{page?.icon || "📄"}</span>
-              <div className="flex flex-col">
+          <div className="shrink-0 bg-[#1a1625] border-b border-[#2d2740] px-3 sm:px-6 py-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+              <span className="text-xl sm:text-2xl shrink-0">
+                {page?.icon || "📄"}
+              </span>
+              <div className="flex flex-col min-w-0 flex-1">
                 <input
                   type="text"
                   value={title}
                   onChange={handleTitleChange}
-                  className="text-lg font-semibold bg-transparent text-[#e8e3f5] outline-none border-none placeholder-[#6b5f88] w-64"
+                  className="text-base sm:text-lg font-semibold bg-transparent text-[#e8e3f5] outline-none border-none placeholder-[#6b5f88] w-full"
                   placeholder="Untitled"
                 />
                 <span className="text-xs text-[#6b5f88] flex items-center gap-1">
@@ -162,21 +181,23 @@ export const PageEditorModal = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleFullscreen}
-                className="p-2 hover:bg-[#2d2740] rounded transition-colors text-[#c4b8e0]"
-                title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-              >
-                {isFullscreen ? (
-                  <Minimize2 size={20} />
-                ) : (
-                  <Maximize2 size={20} />
-                )}
-              </button>
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+              {!isMobile && (
+                <button
+                  onClick={toggleFullscreen}
+                  className="p-2 hover:bg-[#2d2740] rounded transition-colors text-[#c4b8e0]"
+                  title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 size={20} />
+                  ) : (
+                    <Maximize2 size={20} />
+                  )}
+                </button>
+              )}
               <button
                 onClick={handleClose}
-                className="p-2 hover:bg-[#2d2740] rounded transition-colors text-[#c4b8e0]"
+                className="p-2 hover:bg-[#2d2740] rounded transition-colors text-[#c4b8e0] shrink-0"
                 title="Close"
               >
                 <X size={20} />
@@ -195,7 +216,7 @@ export const PageEditorModal = ({
           ) : (
             <>
               {/* Toolbar */}
-              <div className="flex-shrink-0 border-b border-[#2d2740]">
+              <div className="shrink-0 border-b border-[#2d2740]">
                 <EditorToolbar editor={editor} />
               </div>
 

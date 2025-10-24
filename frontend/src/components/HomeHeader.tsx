@@ -5,7 +5,7 @@ import {
   PanelLeftClose,
   PanelRightClose,
   Menu,
-  X,
+  Trash2,
 } from "lucide-react";
 
 interface HomeHeaderProps {
@@ -65,6 +65,7 @@ const HomeHeader = ({
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
+        {/* Desktop: Delete Button with Text */}
         <button
           className="px-3 py-2 sm:px-4 rounded-lg bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 transition-all duration-200 text-xs sm:text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hidden sm:block"
           onClick={onDeleteClick}
@@ -75,11 +76,12 @@ const HomeHeader = ({
 
         {/* Mobile: Delete Icon */}
         <button
-          className="p-2 rounded-lg bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed sm:hidden"
+          className="p-2 rounded-lg bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed block sm:hidden"
           onClick={onDeleteClick}
           disabled={!folderData || folderData.length <= 1}
+          aria-label="Delete Folder"
         >
-          <X className="w-4 h-4" />
+          <Trash2 className="w-4 h-4" />
         </button>
 
         {/* Right Sidebar Toggle */}

@@ -116,7 +116,7 @@ export const PageList = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                <div className="absolute top-2 right-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity flex gap-1">
                   {page.metadata.favorite && (
                     <div className="p-1.5 bg-[#2d2740] rounded">
                       <Star
@@ -129,6 +129,7 @@ export const PageList = () => {
                     onClick={(e) => handleDeletePage(e, page.pageId)}
                     className="p-1.5 bg-[#2d2740] rounded hover:bg-red-600 transition-colors"
                     title="Delete page"
+                    aria-label="Delete page"
                   >
                     <Trash2 size={14} className="text-[#c4b8e0]" />
                   </button>
