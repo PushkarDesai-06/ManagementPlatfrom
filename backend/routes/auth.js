@@ -2,6 +2,8 @@ import express from "express";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import { authorizeJWT } from "../middlewares/authorize.js";
+import folderModel from "../models/folder.model.js";
+import { nanoid } from "nanoid";
 
 export const router = express.Router();
 
@@ -52,6 +54,14 @@ router.post("/register", async (req, res) => {
     const userObj = new User(data);
     const user = await userObj.save();
     console.log(user);
+
+    // Create default folder for new user
+    const folderId = nanoid();
+    await folderModel.create({
+      email: user.email,
+      folders: [{ id: folderId, name: "NewFolder" }],
+    });
+
     const payload = { name: user.name, email: user.email };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 
