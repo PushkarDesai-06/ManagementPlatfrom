@@ -56,8 +56,9 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 w-screen min-h-screen bg-[#0a070f] overflow-hidden">
-      <div className="absolute w-screen h-screen z-0 opacity-30">
+    <div className="relative flex items-center justify-center w-screen min-h-screen bg-linear-to-br from-[#0a070f] via-[#13111c] to-[#0a070f] overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 z-0 opacity-20">
         <Beams
           beamWidth={3}
           beamHeight={12}
@@ -70,94 +71,191 @@ const SignUp = () => {
         />
       </div>
 
-      {/* Title Section */}
-      <div className="flex items-center justify-center lg:justify-end lg:flex-1 z-10 pt-8 lg:pt-0">
-        <h1 className="text-3xl sm:text-4xl text-center p-6 px-8 sm:px-10 rounded-lg bg-[#1a1625] border border-[#2d2740] w-full max-w-xs mx-4 lg:mx-0 lg:w-72">
-          <p className="font-poppins text-[#e8e3f5] font-semibold">Manage</p>
-          <p className="text-[#8b7fb8] text-xl sm:text-2xl">Your Life</p>
-        </h1>
-      </div>
+      {/* Decorative blobs */}
+      <div className="absolute top-20 right-10 w-72 h-72 bg-purple-600/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
 
-      {/* Form Section */}
-      <div className="flex items-center justify-center lg:flex-1 z-10 pb-8 lg:pb-0 px-4">
-        <form
-          onSubmit={handleSubmit}
-          className="p-6 sm:p-8 w-full max-w-md flex flex-col gap-3 rounded-lg bg-[#1a1625] border border-[#2d2740]"
-        >
-          <div className="mb-4">
-            <h2 className="text-2xl font-semibold text-[#e8e3f5] mb-1">
-              Sign Up
-            </h2>
-            <p className="text-sm text-[#6b5f88]">
-              Create your TaskFlow account
-            </p>
-          </div>
-          <label htmlFor="name" className="font-medium text-sm text-[#c4b8e0]">
-            Name
-          </label>
-          <input
-            type="text"
-            name=""
-            minLength={4}
-            required={true}
-            id="name"
-            value={formData.name}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, name: e.target.value }))
-            }
-            placeholder="Enter your name"
-            className="px-3 py-2.5 rounded-lg mb-3 bg-[#0f0b16] text-[#e8e3f5] border border-[#2d2740] placeholder-[#5a4f73] outline-none focus:border-[#7c6ba8] transition"
-          />
-          <label htmlFor="email" className="font-medium text-sm text-[#c4b8e0]">
-            Email
-          </label>
-          <input
-            type="email"
-            name=""
-            required={true}
-            id="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, email: e.target.value }))
-            }
-            placeholder="Enter your email"
-            className="px-3 py-2.5 rounded-lg mb-3 bg-[#0f0b16] text-[#e8e3f5] border border-[#2d2740] placeholder-[#5a4f73] outline-none focus:border-[#7c6ba8] transition"
-          />
-          <label
-            htmlFor="password"
-            className="font-medium text-sm text-[#c4b8e0]"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            name=""
-            required={true}
-            minLength={6}
-            value={formData.password}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, password: e.target.value }))
-            }
-            id="password"
-            placeholder="Enter Password"
-            className="px-3 py-2.5 rounded-lg mb-3 bg-[#0f0b16] text-[#e8e3f5] border border-[#2d2740] placeholder-[#5a4f73] outline-none focus:border-[#7c6ba8] transition"
-          />
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 py-8 lg:py-0">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          {/* Left side - Branding */}
+          <div className="text-center lg:text-left space-y-6">
+            <div className="inline-block p-3 rounded-2xl bg-linear-to-br from-[#7c6ba8] to-[#5a4976] shadow-lg shadow-purple-900/30">
+              <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                <span className="text-3xl">🚀</span>
+              </div>
+            </div>
 
-          <button
-            className="bg-[#7c6ba8] hover:bg-[#8b7fb8] rounded-lg w-full py-2.5 transition text-[#e8e3f5] font-medium mt-2"
-            disabled={loading}
-          >
-            {loading ? "Creating account..." : "Sign Up"}
-          </button>
-          <div className="text-[#8b7fb8] text-center text-sm mt-2">
-            <span>Already have an account? </span>
-            <Link to={"/signin"}>
-              <span className="hover:text-[#a395c9] transition cursor-pointer">
-                Sign in
-              </span>
-            </Link>
+            <div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#e8e3f5] mb-4 font-poppins">
+                Start Your
+                <span className="block bg-linear-to-r from-[#a395c9] to-[#7c6ba8] bg-clip-text text-transparent">
+                  Journey Today
+                </span>
+              </h1>
+              <p className="text-lg sm:text-xl text-[#8b7fb8] max-w-md mx-auto lg:mx-0">
+                Join thousands of users who trust TaskFlow to manage their tasks
+                and boost productivity.
+              </p>
+            </div>
+
+            <div className="hidden lg:grid grid-cols-2 gap-4 pt-4">
+              <div className="p-4 rounded-xl bg-[#1a1625]/50 border border-[#2d2740]">
+                <div className="text-2xl mb-2">✨</div>
+                <p className="text-sm text-[#c4b8e0] font-medium">
+                  Easy to Use
+                </p>
+              </div>
+              <div className="p-4 rounded-xl bg-[#1a1625]/50 border border-[#2d2740]">
+                <div className="text-2xl mb-2">☁️</div>
+                <p className="text-sm text-[#c4b8e0] font-medium">Cloud Sync</p>
+              </div>
+            </div>
           </div>
-        </form>
+
+          {/* Right side - Form */}
+          <div className="w-full">
+            <form
+              onSubmit={handleSubmit}
+              className="p-8 sm:p-10 w-full rounded-2xl bg-[#1a1625]/80 backdrop-blur-xl border border-[#2d2740] shadow-2xl shadow-purple-900/20"
+            >
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold text-[#e8e3f5] mb-2">
+                  Create Account
+                </h2>
+                <p className="text-[#8b7fb8]">
+                  Get started with TaskFlow for free
+                </p>
+              </div>
+
+              <div className="space-y-5">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block font-medium text-sm text-[#c4b8e0] mb-2"
+                  >
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    autoComplete="name"
+                    minLength={4}
+                    required={true}
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, name: e.target.value }))
+                    }
+                    placeholder="John Doe"
+                    className="w-full px-4 py-3 rounded-xl bg-[#0f0b16] text-[#e8e3f5] border border-[#2d2740] placeholder-[#5a4f73] outline-none focus:border-[#7c6ba8] focus:ring-2 focus:ring-[#7c6ba8]/20 transition"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block font-medium text-sm text-[#c4b8e0] mb-2"
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    autoComplete="email"
+                    required={true}
+                    id="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
+                    placeholder="you@example.com"
+                    className="w-full px-4 py-3 rounded-xl bg-[#0f0b16] text-[#e8e3f5] border border-[#2d2740] placeholder-[#5a4f73] outline-none focus:border-[#7c6ba8] focus:ring-2 focus:ring-[#7c6ba8]/20 transition"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block font-medium text-sm text-[#c4b8e0] mb-2"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    autoComplete="new-password"
+                    required={true}
+                    minLength={6}
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
+                    }
+                    id="password"
+                    placeholder="At least 6 characters"
+                    className="w-full px-4 py-3 rounded-xl bg-[#0f0b16] text-[#e8e3f5] border border-[#2d2740] placeholder-[#5a4f73] outline-none focus:border-[#7c6ba8] focus:ring-2 focus:ring-[#7c6ba8]/20 transition"
+                  />
+                  <p className="text-xs text-[#6b5f88] mt-2">
+                    Must be at least 6 characters long
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3.5 rounded-xl bg-linear-to-r from-[#7c6ba8] to-[#6a5a96] hover:from-[#8b7fb8] hover:to-[#7968a5] text-white font-semibold shadow-lg shadow-purple-900/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Creating account...
+                    </span>
+                  ) : (
+                    "Create Account"
+                  )}
+                </button>
+
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-[#2d2740]"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-4 bg-[#1a1625] text-[#6b5f88]">
+                      Already have an account?
+                    </span>
+                  </div>
+                </div>
+
+                <Link to="/signin">
+                  <button
+                    type="button"
+                    className="w-full py-3 rounded-xl bg-[#1a1625]/50 border border-[#2d2740] hover:bg-[#201a2e] hover:border-[#3d3450] text-[#c4b8e0] font-medium transition-all duration-200"
+                  >
+                    Sign In Instead
+                  </button>
+                </Link>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
