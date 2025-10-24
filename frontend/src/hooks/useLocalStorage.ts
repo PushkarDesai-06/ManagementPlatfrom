@@ -4,6 +4,7 @@ const useLocalStorage = () => {
   };
 
   const getLocalStorage = (key: string) => {
+    if (key === "JwtToken") return localStorage.getItem(key);
     return JSON.parse(localStorage.getItem(key)!);
   };
   const removeLocalStorage = (key: string) => {
